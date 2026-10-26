@@ -1,7 +1,9 @@
 import defaultAssembly from '../data/assembly.json';
 import catalogData from '../data/components.json';
 import {validateProjectShape,instanceComponent} from './engineering.js';
-export const catalog=catalogData.components;
+let custom=[];
+try{custom=JSON.parse(localStorage.getItem('space-lot-custom-catalog')||'[]').filter(c=>c.assetId&&/^asset-[a-f0-9-]+$/.test(c.id)&&Array.isArray(c.dimensionsMm)&&c.dimensionsMm.length===3&&c.dimensionsMm.every(v=>Number.isFinite(v)&&v>=0));}catch{}
+export const catalog=[...catalogData.components,...custom];
 const STORAGE_KEY='aeroguide-builder-v0.1';
 export const defaultProject=()=>structuredClone(defaultAssembly);
 function restore() {
@@ -11,6 +13,11 @@ function restore() {
   } catch { return defaultProject(); }
 }
 export const store = {
+  registerAsset(asset){
+    const descriptor={id:'asset-'+asset.id,assetId:asset.id,name:asset.name,category:'custom',subtitle:asset.origin==='ai'?'AI visual · unverified specifications':'Imported mesh · unverified specifications',dimensionsMm:asset.dimensionsMm,massG:asset.massG??null,ports:[],origin:asset.origin};
+    const index=catalog.findIndex(c=>c.id===descriptor.id);if(index<0)catalog.push(descriptor);else catalog[index]=descriptor;
+    localStorage.setItem('space-lot-custom-catalog',JSON.stringify(catalog.filter(c=>c.assetId)));
+  },
   project:restore(), selectedId:'fc-1', activeCategory:'all', search:'', tool:'select',
   mode:'assembly', explode:0, showLabels:true, showClearance:false, highlightedWire:'all',
   subscribers:new Set(),

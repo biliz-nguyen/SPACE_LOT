@@ -1,0 +1,3 @@
+alter policy assets_read on public.community_assets using (status='approved' or owner_id=(select auth.uid()) or ((select auth.jwt())->'app_metadata'->>'role')='space_lot_admin');
+alter policy requests_read on public.model_requests using (owner_id=(select auth.uid()) or ((select auth.jwt())->'app_metadata'->>'role')='space_lot_admin');
+alter policy space_lot_model_read on storage.objects using (bucket_id='space-lot-models' and exists (select 1 from public.community_assets a where a.storage_path=name and (a.status='approved' or a.owner_id=(select auth.uid()) or ((select auth.jwt())->'app_metadata'->>'role')='space_lot_admin')));

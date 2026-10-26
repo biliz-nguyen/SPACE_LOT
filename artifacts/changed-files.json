@@ -1,0 +1,229 @@
+{
+  "backup": "C:\\Users\\Quỳnh\\Documents\\SPACELOT\\backups\\premium-20261026-212219",
+  "comparedAt": "2026-10-26T15:17:11.248Z",
+  "excluded": [
+    "node_modules",
+    "dist",
+    ".npm-cache",
+    ".git",
+    "test-results",
+    "playwright-report",
+    "artifacts",
+    "SHA256.csv",
+    "public/cad"
+  ],
+  "changes": [
+    {
+      "path": "AGENTS.ADDENDUM.md",
+      "status": "deleted"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "status": "deleted"
+    },
+    {
+      "path": "CODEX_MASTER_PROMPT.md",
+      "status": "deleted"
+    },
+    {
+      "path": "components.json",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/AGENTS.ADDENDUM.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/CHANGELOG.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/CODEX_MASTER_PROMPT.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/DESIGN_SYSTEM.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/GITHUB_PUSH.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/HUONG_DAN_CHAY.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/MIGRATION_NOTES.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/PREMIUM_AUDIT.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/PROJECT_README.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/README_START_HERE.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/README.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/SKILL (3).md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/SKILLS_USED.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/START_HERE_VI.workspace.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/VALIDATION_PREMIUM.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/archive/VALIDATION.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/GIT.md",
+      "status": "added"
+    },
+    {
+      "path": "docs/README.md",
+      "status": "added"
+    },
+    {
+      "path": "GITHUB_PUSH.md",
+      "status": "deleted"
+    },
+    {
+      "path": "HUONG_DAN_CHAY.md",
+      "status": "deleted"
+    },
+    {
+      "path": "index.html",
+      "status": "modified"
+    },
+    {
+      "path": "legacy.html",
+      "status": "added"
+    },
+    {
+      "path": "package-lock.json",
+      "status": "modified"
+    },
+    {
+      "path": "package.json",
+      "status": "modified"
+    },
+    {
+      "path": "README_START_HERE.md",
+      "status": "deleted"
+    },
+    {
+      "path": "README.md",
+      "status": "modified"
+    },
+    {
+      "path": "scripts/capture-ui.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/inventory-changes.mjs",
+      "status": "added"
+    },
+    {
+      "path": "scripts/smoke-production.mjs",
+      "status": "added"
+    },
+    {
+      "path": "SKILL (3).md",
+      "status": "deleted"
+    },
+    {
+      "path": "src/App.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/assets/cloud.js",
+      "status": "modified"
+    },
+    {
+      "path": "src/assets/preview.js",
+      "status": "modified"
+    },
+    {
+      "path": "src/assets/studio.js",
+      "status": "modified"
+    },
+    {
+      "path": "src/components/AssemblyViewport.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/InspectorPanel.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/PartsCatalog.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/ui/button.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/components/ui/dialog.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/project.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/lib/utils.ts",
+      "status": "added"
+    },
+    {
+      "path": "src/main.tsx",
+      "status": "added"
+    },
+    {
+      "path": "src/manifest.js",
+      "status": "modified"
+    },
+    {
+      "path": "src/premium.css",
+      "status": "added"
+    },
+    {
+      "path": "src/scene.js",
+      "status": "modified"
+    },
+    {
+      "path": "tests/e2e/premium.spec.js",
+      "status": "added"
+    },
+    {
+      "path": "tsconfig.json",
+      "status": "added"
+    },
+    {
+      "path": "VALIDATION.md",
+      "status": "deleted"
+    },
+    {
+      "path": "vite.config.ts",
+      "status": "added"
+    }
+  ]
+}

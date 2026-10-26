@@ -1,4 +1,7 @@
+import {setupManifest} from './manifest.js';
 import './style.css';
+import './expedition.css';
+import {setupStudio} from './assets/studio.js';
 import { DroneScene } from './scene.js';
 import { store,catalog } from './store.js';
 import { analyze,validate,instanceComponent,categoryOf,portOf } from './engineering.js';
@@ -6,8 +9,8 @@ import { CATALOG_FAMILIES,CATALOG_CATEGORIES,filterCatalog } from './catalog.js'
 
 const $=(sel)=>document.querySelector(sel);
 const clean=(value)=>String(value??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-const TYPES={frame:'Frame',fc:'Flight controller',motor:'Motor',esc:'ESC',prop:'Propeller',battery:'Battery',power:'Power',gps:'GPS',receiver:'Receiver'};
-const ICONS={frame:'⬡',fc:'▦',motor:'✺',esc:'▥',prop:'✧',battery:'▰',power:'⚡',gps:'◉',receiver:'⌁'};
+const TYPES={frame:'Frame',fc:'Flight controller',motor:'Motor',esc:'ESC',prop:'Propeller',battery:'Battery',power:'Power',gps:'GPS',receiver:'Receiver',custom:'Imported assets'};
+const ICONS={frame:'⬡',fc:'▦',motor:'◎',esc:'▥',prop:'⌁',battery:'▰',power:'⚡',gps:'◉',receiver:'⌁',custom:'◈'};
 const model=new DroneScene($('#three-container'),id=>store.select(id), (id,pos)=>store.move(id,pos));
 let lastToastTimer;
 function toast(message){const el=$('#toast');el.textContent=message;el.classList.add('visible');clearTimeout(lastToastTimer);lastToastTimer=setTimeout(()=>el.classList.remove('visible'),3600);}
@@ -52,7 +55,7 @@ function renderCatalog(){
 }
 function renderAssembly(){
   $('#instance-count').textContent=`${store.project.instances.length} PARTS`;
-  const order=['frame','fc','battery','power','gps','receiver','motor','esc','prop'];
+  const order=['frame','fc','battery','power','gps','receiver','motor','esc','prop','custom'];
   const sections=order.map(category=>{
     const parts=store.project.instances.filter(i=>categoryOf(catalog,i)===category);
     if(!parts.length)return '';
@@ -68,21 +71,21 @@ function renderSelection(){
   if(!selected){$('#selected-content').innerHTML='<div class="empty-state">Chọn linh kiện trong hình 3D hoặc danh sách.</div>';return;}
   const component=instanceComponent(catalog,selected);
   $('#selected-content').innerHTML=`
-    <div class="selection-hero"><div class="part-icon big ${component.category}">${ICONS[component.category]}</div><div><strong>${clean(component.name)}</strong><small>${clean(selected.id)}</small></div><span class="data-badge">DEMO</span></div>
+    <div class="selection-hero"><div class="part-icon big ${component.category}">${ICONS[component.category]}</div><div><strong>${clean(component.name)}</strong><small>${clean(selected.id)}</small></div><span class="data-badge">${component.assetId?(component.origin==='ai'?'AI VISUAL':'IMPORTED'):'DEMO'}</span></div>
     <div class="selection-spec"><span>Dimensions</span><strong>${component.dimensionsMm.map(x=>formatNumber(x,0)).join(' × ')} mm</strong></div>
-    <div class="selection-spec"><span>Mass</span><strong>${formatNumber(component.massG)} g</strong></div>
+    <div class="selection-spec"><span>Mass</span><strong>${component.massG===null?'Unknown':formatNumber(component.massG)+' g'}</strong></div>
     <div class="section-title subselection">POSITION <span>mm · engineering axes</span></div>
     <div class="position-grid">${['X · forward','Y · right','Z · up'].map((axis,j)=>`<label>${axis}<input type="number" data-pos="${j}" value="${selected.positionMm[j]}" step="1" min="-5000" max="5000" /></label>`).join('')}</div>
-    <div class="selected-buttons"><button class="btn secondary" id="load-model-btn">▣ Load GLB</button><button class="btn danger" id="delete-selected">Remove</button><input type="file" id="model-file" accept=".glb,model/gltf-binary" hidden /></div>
-    <div class="scope-note selection-note">GLB chỉ thay hình 3D tạm thời. Dữ liệu kỹ thuật vẫn đọc từ components.json; GLB chưa được lưu trong project JSON.</div>`;
+    <div class="selected-buttons"><button class="btn secondary" id="load-model-btn">↥ Import studio</button><button class="btn danger" id="delete-selected">Remove</button><input type="file" id="model-file" accept=".glb,model/gltf-binary" hidden /></div>
+    <div class="scope-note selection-note">Model import được lưu cục bộ trong My hangar. Thông số CAD/pinout cần nguồn xác thực trước khi dùng để kiểm tra tương thích.</div>`;
 }
 function renderMetrics(){
   const data=analyze(store.project,catalog);
-  $('#mass-value').textContent= `${formatNumber(data.massG,0)} g`;
-  $('#cg-value').textContent= `${formatNumber(data.cgOffsetMm,1)} mm`;
+  $('#mass-value').textContent= `${formatNumber(data.massG,0)} g${data.incompleteMass?' + ?':''}`;
+  $('#cg-value').textContent= data.incompleteMass?'Unknown':`${formatNumber(data.cgOffsetMm,1)} mm`;
   $('#twr-value').textContent= Number.isFinite(data.twr)?`${formatNumber(data.twr,2)} : 1`:'N/A';
   $('#time-value').textContent= Number.isFinite(data.hoverMin)?`${formatNumber(data.hoverMin,1)} min`:'N/A';
-  $('#scene-status').textContent=`${store.project.instances.length} parts · CG (${data.cgMm.map(n=>formatNumber(n,1)).join(', ')}) mm`;
+  $('#scene-status').textContent=data.incompleteMass?`${store.project.instances.length} parts · CG unknown (missing mass)`:`${store.project.instances.length} parts · CG (${data.cgMm.map(n=>formatNumber(n,1)).join(', ')}) mm`;
 }
 function renderValidation(){
   const result=validate(store.project,catalog);
@@ -151,14 +154,11 @@ $('#selected-content').addEventListener('change',async e=>{
     const v=Number(input.value);if(!Number.isFinite(v)){toast('Tọa độ không hợp lệ.');renderSelection();return;}
     const pos=[...inst.positionMm];pos[Number(input.dataset.pos)]=v;store.move(inst.id,pos);
   }
-  if(input.id==='model-file' && input.files[0]){
-    try{await model.loadVisualForInstance(store.selectedId,input.files[0]);toast('Đã tải GLB vào viewport (chỉ hình học, không lưu project).');}
-    catch(error){toast(`GLB error: ${error.message}`);}
-  }
+
 });
 $('#selected-content').addEventListener('click',e=>{
   if(e.target.closest('#delete-selected')){store.remove(store.selectedId);toast('Đã xóa linh kiện và dây liên quan.');}
-  if(e.target.closest('#load-model-btn'))$('#model-file')?.click();
+  if(e.target.closest('#load-model-btn'))studio.open('import');
 });
 $('#wiring-panel').addEventListener('change',e=>{if(e.target.id==='wire-focus'){store.highlightedWire=e.target.value;store.changed(false);}});
 $('#wiring-panel').addEventListener('click',e=>{
@@ -177,12 +177,19 @@ document.querySelectorAll('.tool').forEach(btn=>btn.addEventListener('click',()=
 $('#camera-home').addEventListener('click',()=>model.cameraHome());$('#camera-top').addEventListener('click',()=>model.cameraTop());
 $('#clear-selection').addEventListener('click',()=>store.select(null));
 $('#project-name').addEventListener('change',e=>{store.project.projectName=e.target.value.slice(0,72);store.changed();});
-$('#export-btn').addEventListener('click',()=>{downloadJSON('aeroguide-assembly.json',store.project);toast('Đã xuất project JSON.');});
-$('#import-btn').addEventListener('click',()=>$('#import-file').click());
+$('#export-btn').addEventListener('click',()=>{downloadJSON('space-lot-assembly.json',store.project);toast('Đã xuất project JSON.');});
+$('#import-btn').addEventListener('click',()=>studio.open('import'));
+$('#import-project-btn').addEventListener('click',()=>$('#import-file').click());
 $('#import-file').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{store.import(JSON.parse(await file.text()));toast('Đã import project.');}catch(err){toast(`Import failed: ${err.message}`);}e.target.value='';});
 $('#reset-btn').addEventListener('click',()=>{if(confirm('Khôi phục cấu hình mẫu? Các thay đổi chưa export sẽ bị mất.')){store.reset();toast('Đã reset project demo.');}});
 $('#report-btn').addEventListener('click',()=>{
-  const report={generatedAt:new Date().toISOString(),title:'AeroGuide prototype validation report',disclaimer:'ILLUSTRATIVE DATA ONLY — DOES NOT APPROVE REAL HARDWARE',projectName:store.project.projectName,summary:analyze(store.project,catalog),validation:validate(store.project,catalog),instances:store.project.instances.map(i=>({id:i.id,name:instanceComponent(catalog,i)?.name,positionMm:i.positionMm}))};
-  downloadJSON('aeroguide-validation-report.json',report);toast('Đã xuất báo cáo JSON.');
+  const report={generatedAt:new Date().toISOString(),title:'SPACE_LOT prototype validation report',disclaimer:'ILLUSTRATIVE DATA ONLY — DOES NOT APPROVE REAL HARDWARE',projectName:store.project.projectName,summary:analyze(store.project,catalog),validation:validate(store.project,catalog),instances:store.project.instances.map(i=>({id:i.id,name:instanceComponent(catalog,i)?.name,positionMm:i.positionMm}))};
+  downloadJSON('space-lot-validation-report.json',report);toast('Đã xuất báo cáo JSON.');
 });
+setupManifest({store,catalog});
+const studio=setupStudio({store,catalog,model,toast});
+$('#open-hangar').onclick=()=>studio.open('local');
+$('#open-community').onclick=()=>studio.open('community');
+$('#open-ai').onclick=()=>studio.open('ai');
+$('#three-container').addEventListener('asset-error',e=>toast(e.detail));
 render();

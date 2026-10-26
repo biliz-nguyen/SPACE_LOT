@@ -1,35 +1,251 @@
 {
   "schemaVersion": 1,
-  "projectName": "AeroGuide / Demo Quad X",
+  "projectName": "SPACE_LOT / Demo Quad X",
   "instances": [
-    {"id":"frame-1","componentId":"frame-450","positionMm":[0,0,0]},
-    {"id":"fc-1","componentId":"fc-demo","positionMm":[0,0,23]},
-    {"id":"battery-1","componentId":"battery-3s","positionMm":[-10,0,51]},
-    {"id":"power-1","componentId":"power-5v","positionMm":[-68,0,10]},
-    {"id":"gps-1","componentId":"gps-uart","positionMm":[-105,0,66]},
-    {"id":"rx-1","componentId":"rx-uart","positionMm":[5,74,14]},
-    {"id":"motor-1","componentId":"motor-1000","positionMm":[160,-160,24]},
-    {"id":"motor-2","componentId":"motor-1000","positionMm":[160,160,24]},
-    {"id":"motor-3","componentId":"motor-1000","positionMm":[-160,160,24]},
-    {"id":"motor-4","componentId":"motor-1000","positionMm":[-160,-160,24]},
-    {"id":"esc-1","componentId":"esc-30","positionMm":[90,-90,7]},
-    {"id":"esc-2","componentId":"esc-30","positionMm":[90,90,7]},
-    {"id":"esc-3","componentId":"esc-30","positionMm":[-90,90,7]},
-    {"id":"esc-4","componentId":"esc-30","positionMm":[-90,-90,7]},
-    {"id":"prop-1","componentId":"prop-1045","positionMm":[160,-160,45]},
-    {"id":"prop-2","componentId":"prop-1045","positionMm":[160,160,45]},
-    {"id":"prop-3","componentId":"prop-1045","positionMm":[-160,160,45]},
-    {"id":"prop-4","componentId":"prop-1045","positionMm":[-160,-160,45]}
+    {
+      "id": "frame-1",
+      "componentId": "frame-450",
+      "positionMm": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "id": "fc-1",
+      "componentId": "fc-demo",
+      "positionMm": [
+        0,
+        0,
+        23
+      ]
+    },
+    {
+      "id": "battery-1",
+      "componentId": "battery-3s",
+      "positionMm": [
+        -10,
+        0,
+        51
+      ]
+    },
+    {
+      "id": "power-1",
+      "componentId": "power-5v",
+      "positionMm": [
+        -68,
+        0,
+        10
+      ]
+    },
+    {
+      "id": "gps-1",
+      "componentId": "gps-uart",
+      "positionMm": [
+        -105,
+        0,
+        66
+      ]
+    },
+    {
+      "id": "rx-1",
+      "componentId": "rx-uart",
+      "positionMm": [
+        5,
+        74,
+        14
+      ]
+    },
+    {
+      "id": "motor-1",
+      "componentId": "motor-1000",
+      "positionMm": [
+        160,
+        -160,
+        24
+      ]
+    },
+    {
+      "id": "motor-2",
+      "componentId": "motor-1000",
+      "positionMm": [
+        160,
+        160,
+        24
+      ]
+    },
+    {
+      "id": "motor-3",
+      "componentId": "motor-1000",
+      "positionMm": [
+        -160,
+        160,
+        24
+      ]
+    },
+    {
+      "id": "motor-4",
+      "componentId": "motor-1000",
+      "positionMm": [
+        -160,
+        -160,
+        24
+      ]
+    },
+    {
+      "id": "esc-1",
+      "componentId": "esc-30",
+      "positionMm": [
+        90,
+        -90,
+        7
+      ]
+    },
+    {
+      "id": "esc-2",
+      "componentId": "esc-30",
+      "positionMm": [
+        90,
+        90,
+        7
+      ]
+    },
+    {
+      "id": "esc-3",
+      "componentId": "esc-30",
+      "positionMm": [
+        -90,
+        90,
+        7
+      ]
+    },
+    {
+      "id": "esc-4",
+      "componentId": "esc-30",
+      "positionMm": [
+        -90,
+        -90,
+        7
+      ]
+    },
+    {
+      "id": "prop-1",
+      "componentId": "prop-1045",
+      "positionMm": [
+        160,
+        -160,
+        45
+      ]
+    },
+    {
+      "id": "prop-2",
+      "componentId": "prop-1045",
+      "positionMm": [
+        160,
+        160,
+        45
+      ]
+    },
+    {
+      "id": "prop-3",
+      "componentId": "prop-1045",
+      "positionMm": [
+        -160,
+        160,
+        45
+      ]
+    },
+    {
+      "id": "prop-4",
+      "componentId": "prop-1045",
+      "positionMm": [
+        -160,
+        -160,
+        45
+      ]
+    }
   ],
   "connections": [
-    {"id":"wire-1","from":"battery-1","fromPort":"XT60","to":"power-1","toPort":"VBAT","kind":"power","label":"LiPo → power module"},
-    {"id":"wire-2","from":"power-1","fromPort":"5V_OUT","to":"fc-1","toPort":"5V","kind":"power","label":"Regulated 5 V → FC"},
-    {"id":"wire-3","from":"fc-1","fromPort":"UART1_TX","to":"gps-1","toPort":"RX","kind":"signal","label":"FC TX → GPS RX"},
-    {"id":"wire-4","from":"gps-1","fromPort":"TX","to":"fc-1","toPort":"UART1_RX","kind":"signal","label":"GPS TX → FC RX"},
-    {"id":"wire-5","from":"rx-1","fromPort":"TX","to":"fc-1","toPort":"UART2_RX","kind":"signal","label":"Receiver TX → FC RX"},
-    {"id":"wire-6","from":"fc-1","fromPort":"M1","to":"esc-1","toPort":"PWM","kind":"signal","label":"Motor 1 control"},
-    {"id":"wire-7","from":"fc-1","fromPort":"M2","to":"esc-2","toPort":"PWM","kind":"signal","label":"Motor 2 control"},
-    {"id":"wire-8","from":"fc-1","fromPort":"M3","to":"esc-3","toPort":"PWM","kind":"signal","label":"Motor 3 control"},
-    {"id":"wire-9","from":"fc-1","fromPort":"M4","to":"esc-4","toPort":"PWM","kind":"signal","label":"Motor 4 control"}
+    {
+      "id": "wire-1",
+      "from": "battery-1",
+      "fromPort": "XT60",
+      "to": "power-1",
+      "toPort": "VBAT",
+      "kind": "power",
+      "label": "LiPo \u2192 power module"
+    },
+    {
+      "id": "wire-2",
+      "from": "power-1",
+      "fromPort": "5V_OUT",
+      "to": "fc-1",
+      "toPort": "5V",
+      "kind": "power",
+      "label": "Regulated 5 V \u2192 FC"
+    },
+    {
+      "id": "wire-3",
+      "from": "fc-1",
+      "fromPort": "UART1_TX",
+      "to": "gps-1",
+      "toPort": "RX",
+      "kind": "signal",
+      "label": "FC TX \u2192 GPS RX"
+    },
+    {
+      "id": "wire-4",
+      "from": "gps-1",
+      "fromPort": "TX",
+      "to": "fc-1",
+      "toPort": "UART1_RX",
+      "kind": "signal",
+      "label": "GPS TX \u2192 FC RX"
+    },
+    {
+      "id": "wire-5",
+      "from": "rx-1",
+      "fromPort": "TX",
+      "to": "fc-1",
+      "toPort": "UART2_RX",
+      "kind": "signal",
+      "label": "Receiver TX \u2192 FC RX"
+    },
+    {
+      "id": "wire-6",
+      "from": "fc-1",
+      "fromPort": "M1",
+      "to": "esc-1",
+      "toPort": "PWM",
+      "kind": "signal",
+      "label": "Motor 1 control"
+    },
+    {
+      "id": "wire-7",
+      "from": "fc-1",
+      "fromPort": "M2",
+      "to": "esc-2",
+      "toPort": "PWM",
+      "kind": "signal",
+      "label": "Motor 2 control"
+    },
+    {
+      "id": "wire-8",
+      "from": "fc-1",
+      "fromPort": "M3",
+      "to": "esc-3",
+      "toPort": "PWM",
+      "kind": "signal",
+      "label": "Motor 3 control"
+    },
+    {
+      "id": "wire-9",
+      "from": "fc-1",
+      "fromPort": "M4",
+      "to": "esc-4",
+      "toPort": "PWM",
+      "kind": "signal",
+      "label": "Motor 4 control"
+    }
   ]
 }

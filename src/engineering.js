@@ -50,7 +50,9 @@ export function analyze(project, catalog) {
       hoverMin = 60*(battery.capacityMah/1000)*battery.usableFraction/hoverCurrentA;
     }
   }
-  return {massG,cgMm,cgOffsetMm,twr,hoverMin,hoverCurrentA,maximumThrustG};
+  const incompleteMass=project.instances.some(i=>!Number.isFinite(instanceComponent(catalog,i)?.massG));
+  if(incompleteMass){twr=null;hoverMin=null;}
+  return {massG,cgMm,cgOffsetMm,twr,hoverMin,hoverCurrentA,maximumThrustG,incompleteMass};
 }
 function motsSame(motors,catalog) {
   if (!motors.length) return null;
@@ -66,6 +68,7 @@ export function portOf(catalog, instance, portId) {
 export function validate(project,catalog) {
   const issues=[];
   const add=(level,code,message)=>issues.push({level,code,message});
+  for(const inst of project.instances.filter(i=>instanceComponent(catalog,i)?.assetId))add('unknown','IMPORTED_SPECS',`${instanceComponent(catalog,inst).name}: mesh trực quan; chưa xác minh thông số, pinout và tương thích.`);
   const counts = Object.fromEntries(['frame','fc','battery','power','gps','receiver','motor','esc','prop'].map(k=>[k,instancesOf(project,catalog,k).length]));
   if (counts.frame!==1) add('fail','FRAME_COUNT',`Quad X cần 1 frame (hiện có ${counts.frame}).`);
   if (counts.fc!==1) add('fail','FC_COUNT',`Cần 1 flight controller (hiện có ${counts.fc}).`);

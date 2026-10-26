@@ -4,47 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0b1019" />
-  <title>AeroGuide — 3D Drone Builder Lab</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="icon" href="/logo.svg" type="image/svg+xml" />
+  <title>SPACE_LOT — Aerospace Studio</title>
 </head>
-<body>
-  <div id="app">
-    <header class="topbar">
-      <div class="brand"><div class="brandmark">A<span>·</span></div><div><div class="brand-name">AeroGuide <span>LAB</span></div><div class="brand-caption">3D DRONE BUILDER · 0.2.0</div></div></div>
-      <div class="top-center"><span class="live-indicator"></span><span>LOCAL WORKSPACE</span><span class="separator">/</span><input id="project-name" aria-label="Tên project" value="AeroGuide / Demo Quad X" maxlength="72" /></div>
-      <div class="top-actions"><button class="btn ghost" id="reset-btn" title="Khôi phục cấu hình mẫu">↻ <span>Reset</span></button><button class="btn ghost" id="import-btn">↥ <span>Import</span></button><button class="btn primary" id="export-btn">↧ <span>Export JSON</span></button><input id="import-file" type="file" accept=".json,application/json" hidden /></div>
-    </header>
-    <div class="workspace">
-      <aside class="library pane">
-        <div class="pane-head"><div><div class="eyebrow">PARTS LIBRARY</div><h2>Component catalog</h2></div><span class="count" id="part-count">9</span></div>
-        <div class="search-wrapper"><span>⌕</span><input id="catalog-search" placeholder="Search frames, motors, GPS…" aria-label="Tìm linh kiện" autocomplete="off" /><button type="button" class="catalog-clear" id="catalog-clear" title="Xóa tìm kiếm" aria-label="Xóa tìm kiếm" hidden>×</button></div>
-        <div class="catalog-controls">
-          <label for="catalog-filter">Browse parts by category</label>
-          <select id="catalog-filter" aria-label="Lọc theo nhóm linh kiện"></select>
-        </div>
-        <div class="catalog-result-bar"><span id="catalog-match-count" aria-live="polite">9 components</span><button type="button" id="catalog-toggle-all">Expand all</button></div>
-        <div class="library-scroll"><div id="catalog-list" class="catalog-list"></div><div class="library-note"><span>◈</span><div><strong>Demo engineering data</strong><p>Thông số minh họa, không phải datasheet xác thực của nhà sản xuất.</p></div></div></div>
-        <div class="sidebar-bottom"><span class="circle-mini"></span><span>Geometry: procedural</span><strong>WEBGL</strong></div>
-      </aside>
-      <main class="center-pane">
-        <div class="viewport-top"><div><div class="crumb">WORKSPACE / <strong>ASSEMBLY EDITOR</strong></div><h1>Drone configurator</h1><p id="scene-status">Quad X · interactive engineering prototype</p></div><div class="mode-toggle"><button class="mode active" data-mode="assembly">◈ <span>Assembly</span></button><button class="mode" data-mode="wiring">⌁ <span>Wiring</span></button></div></div>
-        <div class="viewport-frame" id="viewport-frame">
-          <div id="three-container" role="img" aria-label="Mô hình drone 3D tương tác"></div>
-          <div class="overlay top-left"><div class="view-chip"><span class="view-dot"></span> PERSPECTIVE <i>·</i> Y-UP ENGINE</div><div class="view-chip muted" id="model-warning">DEMO GEOMETRY</div></div>
-          <div class="overlay top-right"><button class="icon-button" id="camera-home" title="Đặt lại camera">⌂</button><button class="icon-button" id="camera-top" title="Góc nhìn từ trên">⊞</button><button class="icon-button" id="clear-selection" title="Bỏ chọn">×</button></div>
-          <div class="overlay bottom-left"><div class="axis-legend"><span class="ax x">X</span> Forward <span class="ax y">Y</span> Right <span class="ax z">Z</span> Up</div><div class="drag-hint" id="drag-hint">Click để chọn · Kéo chuột trái để xoay · Cuộn để zoom</div></div>
-          <div class="overlay bottom-right"><div class="toolstack"><button class="tool active" data-tool="select" title="Select">↖ <small>Select</small></button><button class="tool" data-tool="move" title="Kéo linh kiện được chọn">✣ <small>Move</small></button></div></div>
-          <div id="toast" class="toast" role="status" aria-live="polite"></div>
-        </div>
-        <div class="under-viewport"><div class="explosion"><span class="control-icon">⤢</span><div><strong>Exploded view</strong><small>Visual only · không thay đổi tọa độ thật</small></div><input id="explode-slider" type="range" min="0" max="100" value="0"/><output id="explode-value">0%</output></div><div class="toolbar-actions"><label class="check"><input type="checkbox" id="show-labels" checked /> Part labels</label><label class="check"><input type="checkbox" id="show-clearance" /> Prop discs</label></div></div>
-        <div class="analytics"><div class="metric"><div class="metric-label">TOTAL MASS <span>◉</span></div><div class="metric-value" id="mass-value">—</div><div class="metric-note">Selected parts · grams</div></div><div class="metric"><div class="metric-label">CG OFFSET <span>⊕</span></div><div class="metric-value" id="cg-value">—</div><div class="metric-note">XY from frame origin</div></div><div class="metric"><div class="metric-label">THRUST / WEIGHT <span>↑</span></div><div class="metric-value" id="twr-value">—</div><div class="metric-note">Demo 3S + 1045 data</div></div><div class="metric"><div class="metric-label">HOVER ESTIMATE <span>◷</span></div><div class="metric-value" id="time-value">—</div><div class="metric-note">Approx. · not verified</div></div></div>
-      </main>
-      <aside class="inspector pane"><div class="pane-head"><div><div class="eyebrow">PROJECT INSPECTOR</div><h2>Build diagnostics</h2></div><span class="status-dot" id="health-dot"></span></div><div class="inspector-scroll"><section class="right-section"><div class="section-title">ASSEMBLY TREE <span id="instance-count">0 PARTS</span></div><div id="assembly-tree" class="assembly-tree"></div></section><section class="right-section" id="selected-panel"><div class="section-title">SELECTED COMPONENT</div><div id="selected-content" class="empty-state">Chọn linh kiện trong khung 3D hoặc danh sách để kiểm tra và chỉnh tọa độ.</div></section><section class="right-section wiring-panel" id="wiring-panel"><div class="section-title">WIRING CONNECTIONS <span id="wire-count"></span></div><div class="notice-small">Các kết nối mẫu chưa bao gồm đầy đủ đường nguồn, GND và bus thực tế. Không sử dụng làm sơ đồ đấu dây phần cứng.</div><div id="wire-list"></div><div class="wire-creator"><select id="wire-from" aria-label="Nguồn kết nối"></select><select id="wire-to" aria-label="Đích kết nối"></select><button id="add-wire-btn" class="btn secondary full">+ Add demo link</button></div></section><section class="right-section"><div class="section-title">VALIDATION <span id="checks-summary"></span></div><div id="diagnostics"></div></section><section class="right-section"><div class="section-title">DATA LIMITS</div><div class="scope-note">Không xác nhận an toàn bay, lực đẩy thật, nhiệt ESC, rung động, thứ tự motor hay pinout thực tế. Các kết quả dựa trên dữ liệu demo.</div></section></div><div class="inspector-footer"><button class="btn secondary full" id="report-btn">▤ Export validation report</button><small>ArduPilot / Mission Planner: planned adapter, not connected</small></div></aside>
-    </div>
-    <footer class="footer"><div><span class="live-indicator"></span> Render engine: THREE.JS <span class="footer-sep">·</span> Engineering: local JSON</div><div>PROTOTYPE · NOT FOR REAL-HARDWARE APPROVAL</div></footer>
-  </div>
-  <script type="module" src="/src/main.js"></script>
-</body>
+<body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body>
 </html>

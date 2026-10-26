@@ -1,0 +1,19 @@
+{
+  "name": "aeroguide-3d-builder-base",
+  "private": true,
+  "version": "0.2.0",
+  "type": "module",
+  "description": "AeroGuide standalone 3D Drone Builder proof of concept",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  }
+}

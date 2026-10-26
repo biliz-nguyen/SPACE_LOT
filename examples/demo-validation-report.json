@@ -1,0 +1,42 @@
+{
+  "projectName": "AeroGuide / Demo Quad X",
+  "warning": "ALL DATA ILLUSTRATIVE — NOT VALIDATED HARDWARE",
+  "analysis": {
+    "massG": 1162,
+    "cgMm": [
+      -7.896729776247849,
+      0.891566265060241,
+      28.189328743545612
+    ],
+    "cgOffsetMm": 7.946900752121728,
+    "twr": 2.7538726333907055,
+    "hoverMin": 13.641580586981473,
+    "hoverCurrentA": 18.297,
+    "maximumThrustG": 3200
+  },
+  "validation": {
+    "issues": [
+      {
+        "level": "pass",
+        "code": "DEMO_CHECKS",
+        "message": "Các quy tắc demo hiện tại đã qua; chưa xác minh phần cứng thật."
+      }
+    ],
+    "summary": {
+      "fail": 0,
+      "warning": 0,
+      "unknown": 0
+    },
+    "counts": {
+      "frame": 1,
+      "fc": 1,
+      "battery": 1,
+      "power": 1,
+      "gps": 1,
+      "receiver": 1,
+      "motor": 4,
+      "esc": 4,
+      "prop": 4
+    }
+  }
+}

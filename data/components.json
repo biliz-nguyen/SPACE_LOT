@@ -1,0 +1,73 @@
+{
+  "schemaVersion": 1,
+  "notice": "DEMO engineering values only, NOT manufacturer specifications. Do not use to approve real-world flight hardware.",
+  "components": [
+    {
+      "id": "frame-450", "category": "frame", "name": "Quad X · 450 mm", "subtitle": "Demo carbon-style frame", "massG": 280,
+      "dimensionsMm": [450,450,35], "mountingPatternsMm": [30.5],
+      "anchors": { "motors": [[160,-160,19],[160,160,19],[-160,160,19],[-160,-160,19]], "flightController": [0,0,21] },
+      "dataStatus": "illustrative"
+    },
+    {
+      "id": "fc-demo", "category": "fc", "name": "F405-style Flight Controller", "subtitle": "Generic 30.5 × 30.5 mounting", "massG": 18,
+      "dimensionsMm": [40,40,9], "mountSpacingMm": 30.5, "inputVoltageV": [4.5,5.5],
+      "ports": [
+        {"id":"5V","signal":"power","direction":"in","voltageV":[4.5,5.5]},
+        {"id":"UART1_TX","signal":"uart-tx","direction":"out","logicVoltageV":3.3},
+        {"id":"UART1_RX","signal":"uart-rx","direction":"in","logicVoltageV":3.3},
+        {"id":"UART2_RX","signal":"uart-rx","direction":"in","logicVoltageV":3.3},
+        {"id":"M1","signal":"pwm","direction":"out"},
+        {"id":"M2","signal":"pwm","direction":"out"},
+        {"id":"M3","signal":"pwm","direction":"out"},
+        {"id":"M4","signal":"pwm","direction":"out"}
+      ], "dataStatus": "illustrative"
+    },
+    {
+      "id": "motor-1000", "category": "motor", "name": "A2212-style · 1000 KV", "subtitle": "Demo outrunner + example thrust curve", "massG": 53,
+      "dimensionsMm": [28,28,30], "kv":1000, "supportedCells": [2,3], "maxCurrentA":18,
+      "propDiameterIn": [9,10],
+      "thrustCurve3S1045": [
+        {"thrustG":0,"currentA":0}, {"thrustG":200,"currentA":2.7},
+        {"thrustG":400,"currentA":6.4}, {"thrustG":600,"currentA":11.5},
+        {"thrustG":800,"currentA":18}
+      ], "dataStatus": "illustrative"
+    },
+    {
+      "id":"esc-30", "category":"esc", "name":"30 A Brushless ESC", "subtitle":"Generic PWM ESC", "massG":27,
+      "dimensionsMm":[47,25,12], "supportedCells":[2,3,4], "continuousCurrentA":30,
+      "ports":[{"id":"VBAT","signal":"battery-power","direction":"in"},{"id":"PWM","signal":"pwm","direction":"in"},{"id":"PHASE","signal":"motor-phase","direction":"out"}],
+      "dataStatus":"illustrative"
+    },
+    {
+      "id":"prop-1045", "category":"prop", "name":"10 × 4.5 in Propeller", "subtitle":"Demo propeller · one unit", "massG":14,
+      "dimensionsMm":[254,254,8], "diameterMm":254, "diameterIn":10,
+      "dataStatus":"illustrative"
+    },
+    {
+      "id":"battery-3s", "category":"battery", "name":"LiPo 3S · 5200 mAh", "subtitle":"Example battery (not a real SKU)", "massG":418,
+      "dimensionsMm":[134,44,33], "cells":3, "nominalVoltageV":11.1,
+      "capacityMah":5200, "dischargeC":30, "usableFraction":0.8,
+      "ports":[{"id":"XT60","signal":"battery-power","direction":"out","nominalVoltageV":11.1}],
+      "dataStatus":"illustrative"
+    },
+    {
+      "id":"power-5v", "category":"power", "name":"5 V Power Module", "subtitle":"Demonstration DC/DC source", "massG":22,
+      "dimensionsMm":[38,21,12], "inputCells":[3,4], "outputVoltageV":5,
+      "maxOutputCurrentA":3,
+      "ports":[{"id":"VBAT","signal":"battery-power","direction":"in"},{"id":"5V_OUT","signal":"power","direction":"out","nominalVoltageV":5}],
+      "dataStatus":"illustrative"
+    },
+    {
+      "id":"gps-uart", "category":"gps", "name":"UART GPS + Compass", "subtitle":"Generic GPS puck", "massG":34,
+      "dimensionsMm":[48,48,20], "inputVoltageV":[4.5,5.5],
+      "ports":[{"id":"RX","signal":"uart-rx","direction":"in","logicVoltageV":3.3},{"id":"TX","signal":"uart-tx","direction":"out","logicVoltageV":3.3}],
+      "dataStatus":"illustrative"
+    },
+    {
+      "id":"rx-uart", "category":"receiver", "name":"Serial Receiver", "subtitle":"Illustrative receiver interface", "massG":14,
+      "dimensionsMm":[30,19,10],
+      "ports":[{"id":"TX","signal":"uart-tx","direction":"out","logicVoltageV":3.3}],
+      "dataStatus":"illustrative"
+    }
+  ]
+}

@@ -191,12 +191,12 @@ input[type="range"] {
   height: 30px;
   width: 30px;
   object-fit: contain;
-  transform: skewX(12deg);
+  transform: ;
   filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.65)) drop-shadow(0 0 10px rgba(0, 255, 136, 0.4));
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
 }
 .brand-logo-frame:hover img {
-  transform: skewX(12deg) scale(1.12);
+  transform: scale(1.12);
   filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.95)) drop-shadow(0 0 16px rgba(0, 255, 136, 0.7));
 }
 .logo-pulse-ring {
@@ -250,28 +250,27 @@ input[type="range"] {
   align-items: center;
   gap: 8px;
   min-width: 0;
-  background: rgba(0, 255, 136, 0.04);
-  border: 1px solid rgba(0, 255, 136, 0.16);
-  border-radius: 8px;
-  padding: 3px 8px;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 .project-prefix {
-  font: 700 10px var(--font-mono);
+  font: 700 10.5px var(--font-mono);
   color: #00ff88;
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
   user-select: none;
-  opacity: 0.85;
+  opacity: 0.9;
 }
 .project-inline-identity input {
-  border: 1px solid transparent;
-  background: transparent;
-  padding: 3px 6px;
-  height: 26px;
+  border: 1px solid rgba(0, 255, 136, 0.2);
+  background: rgba(0, 255, 136, 0.04);
+  border-radius: 4px;
+  padding: 2px 8px;
+  height: 28px;
   font: 600 13px var(--font-display);
   color: #fff;
   width: min(180px, 15vw);
-  border-radius: 6px;
-  transition: all 0.15s ease;
+  transition: all 0.18s ease;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -329,7 +328,7 @@ input[type="range"] {
   animation: badge-breathe-slow 3.6s ease-in-out infinite;
 }
 .local-badge > * {
-  transform: skewX(12deg);
+  transform: ;
 }
 .status-led {
   display: inline-block;
@@ -347,13 +346,12 @@ input[type="range"] {
 .main-nav {
   display: flex;
   align-items: center;
-  gap: 3px;
-  background: rgba(0, 0, 0, 0.65);
-  padding: 4px;
-  border-radius: 9999px;
-  border: 1px solid rgba(0, 255, 136, 0.16);
+  gap: 5px;
+  background: transparent;
+  padding: 0;
+  border: none;
   flex-shrink: 0;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6), 0 2px 12px rgba(0, 0, 0, 0.5);
+  box-shadow: none;
 }
 @keyframes nav-shimmer-sweep {
   0% {
@@ -396,7 +394,7 @@ input[type="range"] {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .main-nav button > * {
-  transform: skewX(12deg);
+  transform: ;
 }
 .main-nav button:hover:not(.active) {
   color: #fff;
@@ -434,64 +432,69 @@ input[type="range"] {
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .unskew-content {
-  transform: skewX(12deg);
+  transform: ;
   display: flex;
   align-items: center;
   gap: inherit;
 }
 .brand.cyber-skew {
-  padding: 4px 10px;
-  background: rgba(0, 0, 0, 0.7);
-  border: 1px solid rgba(0, 255, 136, 0.35);
-  border-radius: 4px;
-  box-shadow: 0 0 12px rgba(0, 255, 136, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.8);
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  transform: none;
 }
 .brand.cyber-skew:hover {
-  border-color: rgba(0, 255, 136, 0.7);
-  box-shadow: 0 0 18px rgba(0, 255, 136, 0.35);
+  border-color: transparent;
+  box-shadow: none;
 }
 .project-inline-identity.cyber-skew {
-  border-radius: 4px;
-  border-color: rgba(0, 255, 136, 0.28);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.7), 0 0 10px rgba(0, 255, 136, 0.1);
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  transform: none;
 }
 .main-nav.cyber-skew {
-  border-radius: 4px;
-  border-color: rgba(0, 255, 136, 0.28);
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+  transform: none;
 }
 .main-nav.cyber-skew button {
-  border-radius: 3px;
+  border-radius: 4px;
 }
 .project-actions.cyber-skew {
   position: relative;
   display: inline-flex;
   align-items: center;
-  background: rgba(0, 0, 0, 0.8);
-  padding: 4px 6px;
-  border-radius: 4px;
-  border: 1px solid rgba(0, 255, 136, 0.35);
-  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.8), 0 0 16px rgba(0, 255, 136, 0.2);
+  background: transparent;
+  padding: 0;
+  border: none;
+  box-shadow: none;
+  transform: none;
 }
 .actions-compact-content {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
 }
 .actions-toggle-handle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   background: rgba(0, 255, 136, 0.08);
-  border: 1px solid rgba(0, 255, 136, 0.3);
+  border: 1px solid rgba(0, 255, 136, 0.35);
   border-radius: 4px;
   transform: skewX(-12deg);
-  padding: 0 9px;
-  height: 30px;
+  padding: 0 12px;
+  height: 32px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .actions-toggle-handle > * {
-  transform: skewX(12deg);
+  transform: ;
 }
 .actions-toggle-handle:hover,
 .actions-toggle-handle.active {
@@ -539,7 +542,7 @@ input[type="range"] {
 .cyber-taskbar-dropdown {
   position: absolute;
   top: calc(100% + 10px);
-  right: 64px;
+  right: 0;
   width: 250px;
   background: rgba(2, 6, 4, 0.97);
   backdrop-filter: blur(24px);
@@ -551,7 +554,7 @@ input[type="range"] {
   gap: 4px;
   z-index: 40;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 255, 136, 0.25);
-  transform: skewX(12deg) translateY(0);
+  transform: translateY(0);
   transform-origin: top right;
   overflow: hidden;
   transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
@@ -562,7 +565,7 @@ input[type="range"] {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: skewX(12deg) translateY(0);
+  transform: translateY(0);
   animation: taskbar-dropdown-unfold 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 .cyber-taskbar-dropdown.taskbar-open::before {
@@ -580,22 +583,22 @@ input[type="range"] {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: skewX(12deg) translateY(-10px) scaleY(0.92);
+  transform: translateY(-10px) scaleY(0.92);
   display: none;
 }
 @keyframes taskbar-dropdown-unfold {
   0% {
     opacity: 0;
-    transform: skewX(12deg) translateY(-14px) scaleY(0.88);
+    transform: translateY(-14px) scaleY(0.88);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
   }
   70% {
     opacity: 0.98;
-    transform: skewX(12deg) translateY(1.5px) scaleY(1.015);
+    transform: translateY(1.5px) scaleY(1.015);
   }
   100% {
     opacity: 1;
-    transform: skewX(12deg) translateY(0) scaleY(1);
+    transform: translateY(0) scaleY(1);
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 255, 136, 0.28);
   }
 }
@@ -709,6 +712,8 @@ input[type="range"] {
   margin: 3px 0;
 }
 #import-btn {
+  height: 32px;
+  
   background: linear-gradient(180deg, rgba(0, 255, 136, 0.3) 0%, rgba(0, 255, 136, 0.14) 100%);
   border: 1px solid rgba(0, 255, 136, 0.55);
   border-radius: 4px;
@@ -720,7 +725,7 @@ input[type="range"] {
   letter-spacing: 0.5px;
 }
 #import-btn > * {
-  transform: skewX(12deg);
+  transform: ;
 }
 #import-btn:hover:not(:disabled) {
   background: linear-gradient(180deg, rgba(0, 255, 136, 0.45) 0%, rgba(0, 255, 136, 0.24) 100%);
@@ -3137,8 +3142,10 @@ input[type="range"] {
     display: none;
   }
   .project-actions #import-btn {
+  height: 32px;
+  
     width: 28px;
-    height: 28px;
+    
     min-width: 28px;
     padding: 0;
     display: inline-flex;

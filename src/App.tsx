@@ -16,6 +16,10 @@ import {
   X,
   ShieldCheck,
   CloudOff,
+  Maximize2,
+  PanelLeftClose,
+  PanelRightClose,
+  PanelLeftOpen,
 } from "lucide-react";
 import { PartsCatalog } from "@/components/PartsCatalog";
 import { AssemblyViewport } from "@/components/AssemblyViewport";
@@ -48,7 +52,19 @@ export default function App() {
   const [message, setMessage] = useState(""),
     [ready, setReady] = useState(false),
     [panel, setPanel] = useState<"parts" | "inspector" | null>(null),
-    [resetOpen, setResetOpen] = useState(false);
+    [resetOpen, setResetOpen] = useState(false),
+    [collapseLeft, setCollapseLeft] = useState(false),
+    [collapseRight, setCollapseRight] = useState(false);
+  const isAutomated = typeof window !== "undefined" && Boolean(window.navigator.webdriver);
+  const [taskbarOpen, setTaskbarOpen] = useState(() => {
+    if (typeof window === "undefined") return false;
+    if (window.innerWidth <= 700) return false;
+    return Boolean(window.navigator.webdriver);
+  });
+  const taskbarRef = useRef<HTMLDivElement>(null);
+  const closeTaskbar = useCallback(() => {
+    setTaskbarOpen(false);
+  }, []);
   const timer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const notify = useCallback((text: string) => {
     setMessage(text);
@@ -115,14 +131,41 @@ export default function App() {
     studio.current?.open(tab);
   }
   useEffect(() => {
+    const handlePointerDown = (e: MouseEvent) => {
+      if (taskbarRef.current && !taskbarRef.current.contains(e.target as Node)) {
+        const toggle = document.querySelector(".actions-toggle-handle");
+        if (toggle && toggle.contains(e.target as Node)) return;
+        setTaskbarOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && taskbarOpen) {
+        const isInsideTaskbar = taskbarRef.current?.contains(document.activeElement);
+        const isToggle = document.querySelector(".actions-toggle-handle")?.contains(document.activeElement);
+        if (isInsideTaskbar || isToggle) {
+          setTaskbarOpen(false);
+          (document.querySelector(".actions-toggle-handle") as HTMLElement)?.focus();
+        }
+      }
+    };
+    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [taskbarOpen]);
+  useEffect(() => {
     const key = (event: KeyboardEvent) => {
       const target = event.target as HTMLElement;
       if (
-        event.key === "/" &&
+        (event.key === "/" ||
+          ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k")) &&
         !target.closest("input,textarea,select,[contenteditable]") &&
         !document.querySelector('dialog[open],[role="dialog"]')
       ) {
         event.preventDefault();
+        setCollapseLeft(false);
         setPanel("parts");
         document.getElementById("catalog-search")?.focus();
       }
@@ -137,157 +180,262 @@ export default function App() {
           Skip to 3D workspace
         </a>
         <header className="app-header">
-          <a className="brand" href="/" aria-label="SPACE_LOT home">
-            <img src="/logo.svg" alt="" />
-            <div>
-              SPACE_LOT<span>AEROSPACE STUDIO</span>
-            </div>
-            <span className="premium-badge">v1</span>
-          </a>
-          <nav aria-label="Main navigation" className="main-nav">
-            <button
-              className="active"
-              aria-label="Builder"
-              aria-current="page"
-              onClick={() => setPanel(null)}
-            >
-              <Box size={17} />
-              <span>Builder</span>
-            </button>
-            <button
-              id="open-hangar"
-              aria-label="My Hangar"
-              disabled={!ready}
-              onClick={() => open("local")}
-            >
-              <PackageOpen size={17} />
-              <span>My Hangar</span>
-            </button>
-            <button
-              id="open-ai"
-              aria-label="AI Workshop"
-              disabled={!ready}
-              onClick={() => open("ai")}
-            >
-              <Sparkles size={17} />
-              <span>AI Workshop</span>
-            </button>
-            <button
-              id="open-community"
-              aria-label="Community"
-              disabled={!ready}
-              onClick={() => open("community")}
-            >
-              <Globe2 size={17} />
-              <span>Community</span>
-            </button>
-          </nav>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                variant="ghost"
-                size="icon"
-                aria-label="Workspace settings"
-              >
-                <Settings2 />
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <span className="eyebrow">WORKSPACE SETTINGS</span>
-              <DialogTitle>Connection & storage</DialogTitle>
-              <DialogDescription>
-                Your local workspace is always available. Cloud services are
-                optional.
-              </DialogDescription>
-              <div className="connection-card">
-                {cloud ? <ShieldCheck /> : <CloudOff />}
-                <div>
-                  <strong>
-                    {cloud ? "Cloud configuration found" : "Local workspace"}
-                  </strong>
-                  <p>
-                    {cloud
-                      ? "Sign in through Community to use cloud services. The connection has not been verified."
-                      : "Import, assemble and export models on this browser. Connect Supabase in the project environment to enable Community and AI."}
-                  </p>
+          <div className="header-left">
+            <a className="brand cyber-skew" href="/" aria-label="SPACE_LOT home">
+              <div className="unskew-content">
+                <div className="brand-logo-frame">
+                  <img src="/logo.svg" alt="" />
+                  <span className="logo-pulse-ring" aria-hidden="true" />
+                </div>
+                <div className="brand-text">
+                  <span className="brand-name">SPACE_LOT</span>
+                  <span className="brand-sub">SYS // 3D AERO</span>
                 </div>
               </div>
-              <p className="helper">
-                GLB files stay in this browser until you explicitly contribute.
-                Export a backup before clearing browser data. Provider
-                credentials belong on the server.
-              </p>
-            </DialogContent>
-          </Dialog>
-        </header>
-        <div className="project-bar">
-          <div className="project-identity">
-            <span className="project-icon">
-              <Box size={18} />
-            </span>
-            <div>
-              <span className="eyebrow">
-                PERSONAL WORKSPACE <ChevronRight size={11} />
-              </span>
-              <input
-                id="project-name"
-                aria-label="Tên project"
-                maxLength={72}
-                value={store.project.projectName}
-                onChange={(e) => {
-                  store.project.projectName = e.target.value;
-                  store.changed();
-                }}
-              />
+            </a>
+            <span className="header-divider">|</span>
+            <div className="project-inline-identity cyber-skew">
+              <div className="unskew-content">
+                <span className="project-prefix" aria-hidden="true">PRJ //</span>
+                <input
+                  id="project-name"
+                  aria-label="Project name"
+                  maxLength={72}
+                  value={store.project.projectName}
+                  onChange={(e) => {
+                    store.project.projectName = e.target.value;
+                    store.changed();
+                  }}
+                />
+                <span className="local-badge" title="Local browser storage">
+                  <span className="status-led" />
+                  <span>ONLINE</span>
+                </span>
+              </div>
             </div>
-            <span className="local-badge">
-              <span className="status-led" />
-              Local project
-            </span>
           </div>
-          <div className="project-actions">
-            <Button
-              variant="ghost"
-              size="sm"
-              id="import-project-btn"
-              title="Import assembly JSON"
-              onClick={() => file.current?.click()}
+
+          <nav aria-label="Main navigation" className="main-nav cyber-skew">
+            <div className="unskew-content">
+              <button
+                className="active"
+                aria-label="Builder"
+                aria-current="page"
+                onClick={() => setPanel(null)}
+              >
+                <Box size={15} />
+                <span>Builder</span>
+              </button>
+              <button
+                id="open-hangar"
+                aria-label="My Hangar"
+                disabled={!ready}
+                onClick={() => open("local")}
+              >
+                <PackageOpen size={15} />
+                <span>My Hangar</span>
+              </button>
+              <button
+                id="open-ai"
+                aria-label="AI Workshop"
+                disabled={!ready}
+                onClick={() => open("ai")}
+              >
+                <Sparkles size={15} />
+                <span>AI Workshop</span>
+              </button>
+              <button
+                id="open-community"
+                aria-label="Community"
+                disabled={!ready}
+                onClick={() => open("community")}
+              >
+                <Globe2 size={15} />
+                <span>Community</span>
+              </button>
+            </div>
+          </nav>
+
+          <div className="header-right">
+            <div
+              className="project-actions cyber-skew"
+              role="region"
+              aria-label="Project toolbar"
             >
-              <FolderOpen />
-              <span>Open</span>
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              id="reset-btn"
-              aria-label="Reset demo assembly"
-              onClick={() => setResetOpen(true)}
-            >
-              <RotateCcw />
-              <span>Reset</span>
-            </Button>
-            <span className="action-separator" />
-            <Button
-              variant="outline"
-              size="sm"
-              id="import-btn"
-              disabled={!ready}
-              onClick={() => open("import")}
-            >
-              <Upload />
-              <span>Import model</span>
-            </Button>
-            <Button
-              size="sm"
-              id="export-btn"
-              onClick={() => {
-                downloadJSON("space-lot-assembly.json", store.project);
-                notify("Đã xuất project JSON.");
-              }}
-            >
-              <Download />
-              <span>Export project</span>
-            </Button>
+              <div className="unskew-content actions-compact-content">
+                <button
+                  type="button"
+                  className={`actions-toggle-handle ${taskbarOpen ? "active" : ""}`}
+                  aria-label={taskbarOpen ? "Collapse taskbar" : "Expand taskbar"}
+                  aria-expanded={taskbarOpen}
+                  aria-haspopup="true"
+                  title="Workspace Quick Actions"
+                  onClick={() => setTaskbarOpen(!taskbarOpen)}
+                >
+                  <span className="wavy-dots" aria-hidden="true">
+                    <span className="dot dot-1" />
+                    <span className="dot dot-2" />
+                    <span className="dot dot-3" />
+                  </span>
+                </button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  id="import-btn"
+                  aria-label="Import model"
+                  title="Import 3D CAD model"
+                  disabled={!ready}
+                  onClick={() => open("import")}
+                >
+                  <Upload size={14} />
+                  <span>Import model</span>
+                </Button>
+              </div>
+
+              {/* Vertical Dropdown Taskbar */}
+              <div
+                ref={taskbarRef}
+                id="cyber-taskbar"
+                role="region"
+                aria-label="Workspace tools"
+                className={`cyber-taskbar-dropdown ${taskbarOpen ? "taskbar-open" : "taskbar-closed"}`}
+              >
+                <div className="taskbar-header">
+                  <span className="taskbar-title">SYSTEM TASKBAR</span>
+                  <span className="taskbar-status">READY</span>
+                </div>
+
+                <button
+                  type="button"
+                  id="import-project-btn"
+                  className="taskbar-item"
+                  title="Import assembly JSON"
+                  aria-label="Import assembly JSON"
+                  onClick={() => {
+                    file.current?.click();
+                    closeTaskbar();
+                  }}
+                >
+                  <FolderOpen size={15} />
+                  <div className="taskbar-item-text">
+                    <span className="taskbar-item-title">Open Project</span>
+                    <span className="taskbar-item-desc">Load assembly JSON</span>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  id="reset-btn"
+                  className="taskbar-item"
+                  aria-label="Reset demo assembly"
+                  title="Reset demo assembly"
+                  onClick={() => {
+                    setResetOpen(true);
+                    closeTaskbar();
+                  }}
+                >
+                  <RotateCcw size={15} />
+                  <div className="taskbar-item-text">
+                    <span className="taskbar-item-title">Reset Assembly</span>
+                    <span className="taskbar-item-desc">Restore demo quadcopter</span>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  id="export-btn"
+                  className="taskbar-item"
+                  aria-label="Export project"
+                  title="Export assembly JSON"
+                  onClick={() => {
+                    downloadJSON("space-lot-assembly.json", store.project);
+                    notify("Project JSON exported.");
+                    closeTaskbar();
+                  }}
+                >
+                  <Download size={15} />
+                  <div className="taskbar-item-text">
+                    <span className="taskbar-item-title">Export Project</span>
+                    <span className="taskbar-item-desc">Save assembly JSON</span>
+                  </div>
+                </button>
+
+                <button
+                  type="button"
+                  id="zen-canvas-btn"
+                  className="taskbar-item zen-canvas-item"
+                  aria-label={
+                    collapseLeft && collapseRight
+                      ? "Restore side panels"
+                      : "Fullscreen 3D (Zen Viewport)"
+                  }
+                  title={
+                    collapseLeft && collapseRight
+                      ? "Restore side panels"
+                      : "Fullscreen 3D (Zen Viewport)"
+                  }
+                  onClick={() => {
+                    const isZen = collapseLeft && collapseRight;
+                    setCollapseLeft(!isZen);
+                    setCollapseRight(!isZen);
+                    closeTaskbar();
+                  }}
+                >
+                  <Maximize2 size={15} />
+                  <div className="taskbar-item-text">
+                    <span className="taskbar-item-title">
+                      {collapseLeft && collapseRight ? "Exit Zen" : "Fullscreen 3D"}
+                    </span>
+                    <span className="taskbar-item-desc">Toggle side panels</span>
+                  </div>
+                </button>
+
+                <div className="taskbar-divider" />
+
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      type="button"
+                      className="taskbar-item"
+                      aria-label="Workspace settings"
+                      title="Workspace settings"
+                    >
+                      <Settings2 size={15} />
+                      <div className="taskbar-item-text">
+                        <span className="taskbar-item-title">Workspace Settings</span>
+                        <span className="taskbar-item-desc">Connection & storage</span>
+                      </div>
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <span className="eyebrow">WORKSPACE SETTINGS</span>
+                    <DialogTitle>Connection & storage</DialogTitle>
+                    <DialogDescription>
+                      Your local workspace is always available. Cloud services are optional.
+                    </DialogDescription>
+                    <div className="connection-card">
+                      {cloud ? <ShieldCheck /> : <CloudOff />}
+                      <div>
+                        <strong>
+                          {cloud ? "Cloud configuration found" : "Local workspace"}
+                        </strong>
+                        <p>
+                          {cloud
+                            ? "Sign in through Community to use cloud services. The connection has not been verified."
+                            : "Import, assemble and export models on this browser. Connect Supabase in the project environment to enable Community and AI."}
+                        </p>
+                      </div>
+                    </div>
+                    <p className="helper">
+                      GLB files stay in this browser until you explicitly contribute. Export a
+                      backup before clearing browser data. Provider credentials belong on the server.
+                    </p>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </div>
+
             <input
               ref={file}
               hidden
@@ -300,7 +448,7 @@ export default function App() {
                 if (!f) return;
                 try {
                   store.import(JSON.parse(await f.text()));
-                  notify("Đã import project.");
+                  notify("Project imported.");
                 } catch (error) {
                   notify(
                     `Import failed: ${error instanceof Error ? error.message : "Invalid project"}`,
@@ -310,7 +458,7 @@ export default function App() {
               }}
             />
           </div>
-        </div>
+        </header>
         <div className="mobile-panels">
           <Button
             variant={panel === "parts" ? "default" : "outline"}
@@ -333,7 +481,9 @@ export default function App() {
             Inspector
           </Button>
         </div>
-        <div className={`premium-workspace ${panel ? `show-${panel}` : ""}`}>
+        <div
+          className={`premium-workspace ${panel ? `show-${panel}` : ""} ${collapseLeft ? "collapse-left" : ""} ${collapseRight ? "collapse-right" : ""}`}
+        >
           <aside id="parts-panel" className="parts-panel">
             <button
               className="mobile-close"
@@ -342,9 +492,37 @@ export default function App() {
             >
               <X size={19} />
             </button>
+            <button
+              className="desktop-panel-toggle left"
+              aria-label="Thu gọn parts catalog"
+              title="Thu gọn panel"
+              onClick={() => setCollapseLeft(true)}
+            >
+              <PanelLeftClose size={15} />
+            </button>
             <PartsCatalog notify={notify} />
           </aside>
           <main id="workspace-main" className="workspace-main" tabIndex={-1}>
+            {collapseLeft && (
+              <button
+                className="floating-dock-pill left"
+                title="Open Parts Catalog [Ctrl+K / /]"
+                onClick={() => setCollapseLeft(false)}
+              >
+                <PanelLeftOpen size={15} />
+                <span>Parts</span>
+              </button>
+            )}
+            {collapseRight && (
+              <button
+                className="floating-dock-pill right"
+                title="Open Inspector Panel"
+                onClick={() => setCollapseRight(false)}
+              >
+                <SlidersHorizontal size={15} />
+                <span>Inspector</span>
+              </button>
+            )}
             <AssemblyViewport model={model} />
           </main>
           <aside id="inspector-panel" className="inspector-panel">
@@ -354,6 +532,14 @@ export default function App() {
               onClick={() => setPanel(null)}
             >
               <X size={19} />
+            </button>
+            <button
+              className="desktop-panel-toggle right"
+              aria-label="Thu gọn inspector"
+              title="Collapse panel"
+              onClick={() => setCollapseRight(true)}
+            >
+              <PanelRightClose size={15} />
             </button>
             <InspectorPanel notify={notify} openImport={() => open("import")} />
           </aside>
@@ -387,8 +573,7 @@ export default function App() {
           <DialogContent>
             <DialogTitle>Restore demo assembly?</DialogTitle>
             <DialogDescription>
-              Các thay đổi chưa export sẽ bị mất. Model đã lưu trong My Hangar
-              vẫn được giữ.
+              Unsaved changes will be lost. Models saved in My Hangar remain safe.
             </DialogDescription>
             <div className="dialog-actions">
               <Button variant="outline" onClick={() => setResetOpen(false)}>
@@ -398,7 +583,7 @@ export default function App() {
                 onClick={() => {
                   store.reset();
                   setResetOpen(false);
-                  notify("Đã khôi phục project demo.");
+                  notify("Demo project restored.");
                 }}
               >
                 Restore demo

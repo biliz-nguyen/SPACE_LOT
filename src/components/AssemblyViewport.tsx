@@ -72,14 +72,13 @@ export function AssemblyViewport({
   return (
     <>
       <div className="viewport-heading">
-        <div>
-          <div className="eyebrow">
-            WORKSPACE <span>/</span> QUAD X PLATFORM
-          </div>
-          <h1>
+        <div className="viewport-title-group">
+          <span className="eyebrow">
+            WORKSPACE <span>/</span> QUAD X
+          </span>
+          <h1 className="viewport-title">
             Assembly studio<span className="title-dot">.</span>
           </h1>
-          <p>Design with intention. Build with precision.</p>
         </div>
         <div className="mode-toggle" role="group" aria-label="Workspace mode">
           <button
@@ -88,7 +87,7 @@ export function AssemblyViewport({
             aria-pressed={store.mode === "assembly"}
             onClick={() => mode("assembly")}
           >
-            <Box size={16} />
+            <Box size={15} />
             <span>Assembly</span>
           </button>
           <button
@@ -97,7 +96,7 @@ export function AssemblyViewport({
             aria-pressed={store.mode === "wiring"}
             onClick={() => mode("wiring")}
           >
-            <GitBranch size={16} />
+            <GitBranch size={15} />
             <span>Wiring</span>
           </button>
         </div>
@@ -106,16 +105,12 @@ export function AssemblyViewport({
         <div
           id="three-container"
           role="img"
-          aria-label="Mô hình drone 3D tương tác"
+          aria-label="Interactive 3D drone viewport"
         />
         <div className="overlay top-left">
           <span className="view-chip">
             <span className="status-led" />
-            PERSPECTIVE <span className="technical">3D</span>
-          </span>
-          <span className="stage-caption">
-            {store.mode === "assembly" ? "ASSEMBLY VIEW" : "CONNECTION VIEW"}
-            <span>01 / QUAD X</span>
+            <span>{store.mode === "assembly" ? "3D ASSEMBLY" : "3D WIRING"}</span>
           </span>
         </div>
         <div className="overlay top-right camera-controls">
@@ -123,8 +118,8 @@ export function AssemblyViewport({
             variant="outline"
             size="icon"
             id="camera-home"
-            title="Đặt lại camera"
-            aria-label="Đặt lại camera"
+            title="Reset camera"
+            aria-label="Reset camera"
             onClick={() => model.current?.cameraHome()}
           >
             <House />
@@ -133,8 +128,8 @@ export function AssemblyViewport({
             variant="outline"
             size="icon"
             id="camera-top"
-            title="Góc nhìn từ trên"
-            aria-label="Góc nhìn từ trên"
+            title="Top view"
+            aria-label="Top view"
             onClick={() => model.current?.cameraTop()}
           >
             <Grid2X2 />
@@ -142,8 +137,8 @@ export function AssemblyViewport({
           <Button
             variant="outline"
             size="icon"
-            title="Hiện / ẩn grid"
-            aria-label="Hiện / ẩn grid"
+            title="Toggle grid"
+            aria-label="Toggle grid"
             onClick={() => {
               if (model.current)
                 model.current.grid.visible = !model.current.grid.visible;
@@ -169,7 +164,7 @@ export function AssemblyViewport({
           </div>
           <p id="drag-hint">
             {store.tool === "move"
-              ? "Kéo linh kiện trên mặt phẳng XY · giữ cao độ Z"
+              ? "Drag part on XY plane · preserve Z height"
               : "Drag to orbit · Scroll to zoom · Click to select"}
           </p>
         </div>
@@ -195,7 +190,6 @@ export function AssemblyViewport({
             <span>Move</span>
           </button>
         </div>
-        <div className="stage-scale">ENGINEERING / mm</div>
         <div id="viewport-error" role="status" />
       </div>
       <div className="viewport-status">
@@ -210,9 +204,9 @@ export function AssemblyViewport({
       </div>
       <div className="under-viewport">
         <div className="explosion">
-          <Layers size={18} />
+          <Layers size={16} />
           <label htmlFor="explode-slider">
-            Exploded view<small>Visual separation only</small>
+            Exploded view<small>Visual only</small>
           </label>
           <input
             id="explode-slider"
@@ -258,17 +252,19 @@ export function AssemblyViewport({
           </label>
         </div>
       </div>
-      <div className="analytics">
+      <div className="metrics-strip" role="region" aria-label="Assembly metrics">
         {metrics.map(({ label, value, unit, note, id, Icon }) => (
-          <div className="metric" key={id}>
-            <div className="metric-label">
-              {label}
-              <Icon size={16} />
+          <div className="metric-cell" key={id} title={`${label}: ${note}`}>
+            <div className="metric-header">
+              <Icon size={13} />
+              <span>{label}</span>
             </div>
-            <div className="metric-value" id={id}>
-              {value} <span>{unit}</span>
+            <div className="metric-data">
+              <span className="metric-num" id={id}>
+                {value}
+              </span>
+              {unit ? <span className="metric-unit">{unit}</span> : null}
             </div>
-            <p>{note}</p>
           </div>
         ))}
       </div>

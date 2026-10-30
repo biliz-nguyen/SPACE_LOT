@@ -215,7 +215,7 @@ export class DroneScene {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(this.renderer.domElement);
     this.scene = new THREE.Scene();
-    this.scene.fog = new THREE.FogExp2(0x0b1018, 0.016);
+    this.scene.fog = new THREE.FogExp2(0x000000, 0.016);
     this.camera = new THREE.PerspectiveCamera(
       42,
       container.clientWidth / Math.max(1, container.clientHeight),
@@ -246,13 +246,13 @@ export class DroneScene {
     const fill = new THREE.DirectionalLight(0xd6b582, 0.9);
     fill.position.set(-6, 3, -4);
     this.scene.add(fill);
-    const rim = new THREE.DirectionalLight(0x75bde7, 1.4);
+    const rim = new THREE.DirectionalLight(0x00ff88, 1.4);
     rim.position.set(-2, 4, -6);
     this.scene.add(rim);
-    this.grid = new THREE.GridHelper(9, 36, 0x52687f, 0x2a3848);
+    this.grid = new THREE.GridHelper(9, 36, 0x00ff88, 0x072814);
     this.grid.position.y = -0.37;
     this.grid.material.transparent = true;
-    this.grid.material.opacity = 0.42;
+    this.grid.material.opacity = 0.55;
     this.scene.add(this.grid);
     const ground = new THREE.Mesh(
       new THREE.PlaneGeometry(9, 9),

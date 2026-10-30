@@ -3,6 +3,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import {
   Box,
   ChevronRight,
+  ChevronDown,
   CheckCircle2,
   AlertTriangle,
   HelpCircle,
@@ -104,36 +105,6 @@ export function InspectorPanel({
         </Tabs.List>
         <div className="inspector-content">
           <Tabs.Content value="inspect" className="inspector-tab">
-            <section className="inspector-section">
-              <div className="section-caption">
-                ASSEMBLY TREE{" "}
-                <span id="instance-count">
-                  {store.project.instances.length} PARTS
-                </span>
-              </div>
-              <div className="assembly-tree" id="assembly-tree">
-                {store.project.instances.map((instance) => {
-                  const component = partOf(instance);
-                  return (
-                    <button
-                      key={instance.id}
-                      data-select={instance.id}
-                      className={`tree-item ${selected?.id === instance.id ? "active" : ""}`}
-                      onClick={() => store.select(instance.id)}
-                    >
-                      <Box size={15} />
-                      <span>{component?.name || "Unknown component"}</span>
-                      <ChevronRight size={13} />
-                    </button>
-                  );
-                })}
-                {store.project.instances.length === 0 ? (
-                  <div className="empty-state">
-                    Thêm linh kiện từ Parts catalog để bắt đầu.
-                  </div>
-                ) : null}
-              </div>
-            </section>
             <section id="selected-panel" className="inspector-section">
               <div className="section-caption">
                 COMPONENT DETAILS <span className="technical">mm / g</span>
@@ -143,7 +114,7 @@ export function InspectorPanel({
                   <>
                     <div className="selection-hero">
                       <span className="selected-symbol">
-                        <Box size={25} />
+                        <Box size={20} />
                       </span>
                       <div>
                         <strong>{part.name}</strong>
@@ -236,7 +207,7 @@ export function InspectorPanel({
                   </>
                 ) : (
                   <div className="empty-state">
-                    <Box size={32} />
+                    <Box size={24} />
                     <strong>Select a component</strong>
                     <p>
                       Chọn trên mô hình 3D hoặc trong assembly tree để kiểm tra
@@ -246,6 +217,39 @@ export function InspectorPanel({
                 )}
               </div>
             </section>
+            <details open className="inspector-disclosure">
+              <summary className="section-caption disclosure-summary">
+                <span>ASSEMBLY TREE</span>
+                <span className="disclosure-badge">
+                  <span id="instance-count">
+                    {store.project.instances.length} PARTS
+                  </span>
+                  <ChevronDown size={14} className="disclosure-chevron" />
+                </span>
+              </summary>
+              <div className="assembly-tree" id="assembly-tree">
+                {store.project.instances.map((instance) => {
+                  const component = partOf(instance);
+                  return (
+                    <button
+                      key={instance.id}
+                      data-select={instance.id}
+                      className={`tree-item ${selected?.id === instance.id ? "active" : ""}`}
+                      onClick={() => store.select(instance.id)}
+                    >
+                      <Box size={14} />
+                      <span>{component?.name || "Unknown component"}</span>
+                      <ChevronRight size={13} />
+                    </button>
+                  );
+                })}
+                {store.project.instances.length === 0 ? (
+                  <div className="empty-state">
+                    Thêm linh kiện từ Parts catalog để bắt đầu.
+                  </div>
+                ) : null}
+              </div>
+            </details>
           </Tabs.Content>
           <Tabs.Content value="wiring" className="inspector-tab">
             <section id="wiring-panel" className="inspector-section">

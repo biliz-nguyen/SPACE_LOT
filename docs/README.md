@@ -2,6 +2,8 @@
 
 Đây là bản tóm tắt dùng hằng ngày. README ở gốc hướng dẫn mở app; [GIT.md](GIT.md) hướng dẫn đưa code lên GitHub. Tài liệu dài trước đây nằm trong [archive](archive/README.md).
 
+[Brief UI cho Antigravity](ANTIGRAVITY_UI_BRIEF.md): phân tích giao diện, bố cục tinh gọn, bản đồ component và phân công UI với server/data/logic do Codex phụ trách.
+
 ## Chạy và sử dụng
 
 Yêu cầu Node.js 22.12 trở lên. Chạy lệnh ở thư mục `SPACE_LOT` có `package.json`, không phải thư mục cha `SPACELOT`.

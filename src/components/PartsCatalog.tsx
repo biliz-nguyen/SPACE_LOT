@@ -130,10 +130,20 @@ export function PartsCatalog({
                         </Accordion.Header>
                         <Accordion.Content className="catalog-content">
                           {items.map((part) => (
-                            <div className="part-card" key={part.id}>
-                              <div className="part-card-name">
-                                <Layers size={17} />
-                                <strong>{part.name}</strong>
+                            <div className="part-card part-row" key={part.id}>
+                              <div className="part-card-main">
+                                <div className="part-card-name">
+                                  <Layers size={14} className="part-icon" />
+                                  <strong>{part.name}</strong>
+                                </div>
+                                <span className="part-sub">{part.subtitle}</span>
+                              </div>
+                              <div className="part-card-side">
+                                <span className="part-meta">
+                                  {part.massG === null
+                                    ? "Unknown"
+                                    : `${number(part.massG, 0)} g`}
+                                </span>
                                 <Button
                                   size="icon"
                                   variant="ghost"
@@ -147,17 +157,9 @@ export function PartsCatalog({
                                     )
                                   }
                                 >
-                                  <Plus />
+                                  <Plus size={14} />
                                 </Button>
                               </div>
-                              <p>{part.subtitle}</p>
-                              <span className="part-meta">
-                                {part.massG === null
-                                  ? "Mass unknown"
-                                  : `${number(part.massG, 0)} g`}
-                                <i />
-                                {part.assetId ? "IMPORTED" : "DEMO"}
-                              </span>
                             </div>
                           ))}
                         </Accordion.Content>

@@ -553,22 +553,86 @@ input[type="range"] {
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 255, 136, 0.25);
   transform: skewX(12deg) translateY(0);
   transform-origin: top right;
-  transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              visibility 0.2s;
+  overflow: hidden;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.22s;
 }
 .cyber-taskbar-dropdown.taskbar-open {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
   transform: skewX(12deg) translateY(0);
+  animation: taskbar-dropdown-unfold 0.26s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.cyber-taskbar-dropdown.taskbar-open::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent 0%, #00ff88 50%, #00ffcc 80%, transparent 100%);
+  animation: taskbar-laser-sweep 0.45s ease-out forwards;
+  pointer-events: none;
 }
 .cyber-taskbar-dropdown.taskbar-closed {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: skewX(12deg) translateY(-8px);
+  transform: skewX(12deg) translateY(-10px) scaleY(0.92);
   display: none;
+}
+@keyframes taskbar-dropdown-unfold {
+  0% {
+    opacity: 0;
+    transform: skewX(12deg) translateY(-14px) scaleY(0.88);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  }
+  70% {
+    opacity: 0.98;
+    transform: skewX(12deg) translateY(1.5px) scaleY(1.015);
+  }
+  100% {
+    opacity: 1;
+    transform: skewX(12deg) translateY(0) scaleY(1);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 255, 136, 0.28);
+  }
+}
+@keyframes taskbar-laser-sweep {
+  0% {
+    opacity: 0;
+    transform: scaleX(0.1);
+  }
+  45% {
+    opacity: 1;
+    transform: scaleX(1);
+    box-shadow: 0 0 10px #00ff88, 0 0 18px rgba(0, 255, 204, 0.8);
+  }
+  100% {
+    opacity: 0.7;
+    transform: scaleX(1);
+    box-shadow: 0 0 6px rgba(0, 255, 136, 0.4);
+  }
+}
+.cyber-taskbar-dropdown.taskbar-open .taskbar-item {
+  animation: taskbar-item-slide 0.24s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+.cyber-taskbar-dropdown.taskbar-open .taskbar-item:nth-of-type(1) { animation-delay: 0.03s; }
+.cyber-taskbar-dropdown.taskbar-open .taskbar-item:nth-of-type(2) { animation-delay: 0.06s; }
+.cyber-taskbar-dropdown.taskbar-open .taskbar-item:nth-of-type(3) { animation-delay: 0.09s; }
+.cyber-taskbar-dropdown.taskbar-open .taskbar-item:nth-of-type(4) { animation-delay: 0.12s; }
+.cyber-taskbar-dropdown.taskbar-open .taskbar-item:nth-of-type(5) { animation-delay: 0.15s; }
+
+@keyframes taskbar-item-slide {
+  0% {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 .taskbar-header {
   display: flex;

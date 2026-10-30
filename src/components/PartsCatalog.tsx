@@ -13,6 +13,7 @@ import {
   CATALOG_FAMILIES,
   CATALOG_CATEGORIES,
   filterCatalog,
+  CATEGORY_IMAGE_MAP,
 } from "../catalog.js";
 import { catalog, store, useProject, number, type Part } from "@/lib/project";
 import { Button } from "./ui/button";
@@ -121,8 +122,16 @@ export function PartsCatalog({
                             data-toggle-category={c.id}
                           >
                             <span className="category-symbol">
+                            {CATEGORY_IMAGE_MAP[c.id] ? (
+                              <img
+                                src={CATEGORY_IMAGE_MAP[c.id]}
+                                alt=""
+                                className="category-icon-img"
+                              />
+                            ) : (
                               <Box size={17} />
-                            </span>
+                            )}
+                          </span>
                             <span>{c.label}</span>
                             <small>{items.length}</small>
                             <ChevronDown size={14} className="chevron" />
@@ -133,7 +142,15 @@ export function PartsCatalog({
                             <div className="part-card part-row" key={part.id}>
                               <div className="part-card-main">
                                 <div className="part-card-name">
-                                  <Layers size={14} className="part-icon" />
+                                  {CATEGORY_IMAGE_MAP[part.category] ? (
+                                    <img
+                                      src={CATEGORY_IMAGE_MAP[part.category]}
+                                      alt=""
+                                      className="part-icon-img"
+                                    />
+                                  ) : (
+                                    <Layers size={14} className="part-icon" />
+                                  )}
                                   <strong>{part.name}</strong>
                                 </div>
                                 <span className="part-sub">{part.subtitle}</span>

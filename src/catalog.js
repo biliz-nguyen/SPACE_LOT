@@ -1,5 +1,18 @@
 // Browse by engineering component class, with families for quick visual scanning.
 // The category IDs are the stable `components.json` IDs; labels are UI-only.
+/** @type {Record<string, string>} */
+export const CATEGORY_IMAGE_MAP = {
+  frame: '/images/Drone_frame.png',
+  motor: '/images/Motor.png',
+  prop: '/images/Prop.png',
+  esc: '/images/ESC.png',
+  fc: '/images/FC.png',
+  gps: '/images/GPS.png',
+  receiver: '/images/TX_RX.png',
+  battery: '/images/Battery.png',
+  power: '/images/Charge.png',
+};
+
 export const CATALOG_FAMILIES=[
   {name:'AIRFRAME',categories:[{id:'frame',label:'Drone Frames',description:'Khung và điểm lắp'}]},
   {name:'PROPULSION',categories:[

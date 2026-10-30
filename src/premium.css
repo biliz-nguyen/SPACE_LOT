@@ -475,6 +475,11 @@ input[type="range"] {
   box-shadow: none;
   transform: none;
 }
+.taskbar-anchor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
 .actions-compact-content {
   display: flex;
   align-items: center;
@@ -544,7 +549,7 @@ input[type="range"] {
   top: calc(100% + 10px);
   right: 0;
   width: 250px;
-  background: rgba(2, 6, 4, 0.97);
+  background: rgba(2, 6, 4, 0.98);
   backdrop-filter: blur(24px);
   border: 1px solid rgba(0, 255, 136, 0.45);
   border-radius: 6px;
@@ -552,7 +557,7 @@ input[type="range"] {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  z-index: 40;
+  z-index: 60;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 255, 136, 0.25);
   transform: translateY(0);
   transform-origin: top right;
@@ -3668,4 +3673,45 @@ input[type="range"] {
     transition: none !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* Custom Part & Category Iconography */
+.category-icon-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  border-radius: 4px;
+  filter: drop-shadow(0 0 3px rgba(0, 255, 136, 0.45));
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), filter 0.2s ease;
+}
+.catalog-trigger:hover .category-icon-img {
+  transform: scale(1.12);
+  filter: drop-shadow(0 0 7px rgba(0, 255, 136, 0.8));
+}
+.part-icon-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  border-radius: 3px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 2px rgba(0, 255, 136, 0.35));
+}
+.inspector-icon-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  border-radius: 4px;
+  filter: drop-shadow(0 0 6px rgba(0, 255, 136, 0.5));
+}
+.tree-icon-img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  mix-blend-mode: screen;
+  border-radius: 2px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 0 2px rgba(0, 255, 136, 0.3));
 }

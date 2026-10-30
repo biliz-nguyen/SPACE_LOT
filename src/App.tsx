@@ -131,12 +131,21 @@ export default function App() {
     studio.current?.open(tab);
   }
   useEffect(() => {
-    const handlePointerDown = (e: MouseEvent) => {
-      if (taskbarRef.current && !taskbarRef.current.contains(e.target as Node)) {
-        const toggle = document.querySelector(".actions-toggle-handle");
-        if (toggle && toggle.contains(e.target as Node)) return;
+    const handleResize = () => {
+      if (window.innerWidth <= 700) {
         setTaskbarOpen(false);
       }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  useEffect(() => {
+    const handlePointerDown = (e: PointerEvent | MouseEvent) => {
+      const target = e.target as Element | null;
+      if (!target) return;
+      if (target.closest("#cyber-taskbar")) return;
+      if (target.closest(".actions-toggle-handle")) return;
+      setTaskbarOpen(false);
     };
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && taskbarOpen) {
@@ -148,10 +157,10 @@ export default function App() {
         }
       }
     };
-    document.addEventListener("mousedown", handlePointerDown);
+    document.addEventListener("pointerdown", handlePointerDown, true);
     document.addEventListener("keydown", handleKeyDown);
     return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
+      document.removeEventListener("pointerdown", handlePointerDown, true);
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, [taskbarOpen]);

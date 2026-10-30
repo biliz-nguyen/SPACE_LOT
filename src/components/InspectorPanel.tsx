@@ -25,6 +25,7 @@ import {
   type Vector3,
 } from "@/lib/project";
 import { Button } from "./ui/button";
+import { CATEGORY_IMAGE_MAP } from "../catalog.js";
 export function InspectorPanel({
   notify,
   openImport,
@@ -114,7 +115,15 @@ export function InspectorPanel({
                   <>
                     <div className="selection-hero">
                       <span className="selected-symbol">
-                        <Box size={20} />
+                        {part.category && CATEGORY_IMAGE_MAP[part.category] ? (
+                          <img
+                            src={CATEGORY_IMAGE_MAP[part.category]}
+                            alt=""
+                            className="inspector-icon-img"
+                          />
+                        ) : (
+                          <Box size={20} />
+                        )}
                       </span>
                       <div>
                         <strong>{part.name}</strong>
@@ -237,7 +246,15 @@ export function InspectorPanel({
                       className={`tree-item ${selected?.id === instance.id ? "active" : ""}`}
                       onClick={() => store.select(instance.id)}
                     >
-                      <Box size={14} />
+                      {component?.category && CATEGORY_IMAGE_MAP[component.category] ? (
+                        <img
+                          src={CATEGORY_IMAGE_MAP[component.category]}
+                          alt=""
+                          className="tree-icon-img"
+                        />
+                      ) : (
+                        <Box size={14} />
+                      )}
                       <span>{component?.name || "Unknown component"}</span>
                       <ChevronRight size={13} />
                     </button>

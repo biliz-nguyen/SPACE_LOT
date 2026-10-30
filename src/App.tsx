@@ -184,7 +184,7 @@ export default function App() {
             <a className="brand cyber-skew" href="/" aria-label="SPACE_LOT home">
               <div className="unskew-content">
                 <div className="brand-logo-frame">
-                  <img src="/logo.svg" alt="" />
+                  <img src="/logo.png" alt="" />
                   <span className="logo-pulse-ring" aria-hidden="true" />
                 </div>
                 <div className="brand-text">

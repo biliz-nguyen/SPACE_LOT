@@ -193,7 +193,6 @@ export default function App() {
                 </div>
               </div>
             </a>
-            <span className="header-divider">|</span>
             <div className="project-inline-identity cyber-skew">
               <div className="unskew-content">
                 <span className="project-prefix" aria-hidden="true">PRJ //</span>

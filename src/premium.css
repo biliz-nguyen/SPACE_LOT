@@ -180,8 +180,7 @@ input[type="range"] {
   justify-content: center;
   width: 36px;
   height: 36px;
-  border-radius: 4px;
-  transform: skewX(-12deg);
+  border-radius: 6px;
   background: linear-gradient(135deg, rgba(0, 255, 136, 0.22) 0%, rgba(0, 255, 136, 0.04) 100%);
   border: 1px solid rgba(0, 255, 136, 0.55);
   box-shadow: 0 0 16px rgba(0, 255, 136, 0.4), inset 0 0 10px rgba(0, 255, 136, 0.25);
@@ -191,7 +190,6 @@ input[type="range"] {
   height: 22px;
   width: 22px;
   filter: drop-shadow(0 0 8px #00ff88);
-  transform: skewX(12deg);
 }
 .logo-pulse-ring {
   position: absolute;
@@ -317,13 +315,9 @@ input[type="range"] {
   border: 1px solid rgba(0, 255, 136, 0.35);
   background: rgba(0, 255, 136, 0.08);
   border-radius: 4px;
-  transform: skewX(-12deg);
   padding: 2px 8px;
   white-space: nowrap;
   animation: badge-breathe-slow 3.6s ease-in-out infinite;
-}
-.local-badge > * {
-  transform: skewX(12deg);
 }
 .status-led {
   display: inline-block;
@@ -377,7 +371,6 @@ input[type="range"] {
   background: transparent;
   border: 1px solid transparent;
   border-radius: 4px;
-  transform: skewX(-12deg);
   color: var(--muted);
   padding: 6px 14px;
   font-size: 13px;
@@ -388,9 +381,6 @@ input[type="range"] {
   white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.main-nav button > * {
-  transform: skewX(12deg);
 }
 .main-nav button:hover:not(.active) {
   color: #fff;
@@ -404,7 +394,7 @@ input[type="range"] {
   background-size: 250% 250%;
   border-color: rgba(0, 255, 136, 0.35);
   animation: nav-shimmer-sweep 2.2s ease infinite, nav-glow-pulse 2.2s ease-in-out infinite;
-  transform: skewX(-12deg) translateY(-1px);
+  transform: translateY(-1px);
 }
 .main-nav button.active {
   color: #fff;
@@ -422,13 +412,11 @@ input[type="range"] {
   gap: 8px;
   flex-shrink: 0;
 }
-/* PARALLELOGRAM SKEW STYLING (SKETCHED AEROSPACE HUD CAPSULE) */
+/* STRAIGHT CYBER HUD CAPSULES */
 .cyber-skew {
-  transform: skewX(-12deg);
   transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .unskew-content {
-  transform: skewX(12deg);
   display: flex;
   align-items: center;
   gap: inherit;
@@ -478,14 +466,10 @@ input[type="range"] {
   background: rgba(0, 255, 136, 0.08);
   border: 1px solid rgba(0, 255, 136, 0.3);
   border-radius: 4px;
-  transform: skewX(-12deg);
   padding: 0 9px;
   height: 30px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.actions-toggle-handle > * {
-  transform: skewX(12deg);
 }
 .actions-toggle-handle:hover,
 .actions-toggle-handle.active {
@@ -545,7 +529,7 @@ input[type="range"] {
   gap: 4px;
   z-index: 40;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 255, 136, 0.25);
-  transform: skewX(-8deg);
+  transform: translateY(0);
   transform-origin: top right;
   transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
@@ -555,13 +539,13 @@ input[type="range"] {
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: skewX(-8deg) translateY(0);
+  transform: translateY(0);
 }
 .cyber-taskbar-dropdown.taskbar-closed {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transform: skewX(-8deg) translateY(-8px);
+  transform: translateY(-8px);
   display: none;
 }
 .taskbar-header {
@@ -571,7 +555,6 @@ input[type="range"] {
   padding: 4px 6px 6px 6px;
   border-bottom: 1px solid rgba(0, 255, 136, 0.18);
   margin-bottom: 2px;
-  transform: skewX(8deg);
 }
 .taskbar-title {
   font: 700 9px var(--font-mono);
@@ -602,9 +585,6 @@ input[type="range"] {
   cursor: pointer;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
   font-family: inherit;
-}
-.taskbar-item > * {
-  transform: skewX(8deg);
 }
 .taskbar-item:hover,
 .taskbar-item:focus-visible {
@@ -646,20 +626,16 @@ input[type="range"] {
   background: linear-gradient(180deg, rgba(0, 255, 136, 0.3) 0%, rgba(0, 255, 136, 0.14) 100%);
   border: 1px solid rgba(0, 255, 136, 0.55);
   border-radius: 4px;
-  transform: skewX(-12deg);
   color: #fff;
   box-shadow: 0 2px 12px rgba(0, 255, 136, 0.25);
   padding: 0 14px;
   font-family: var(--font-game);
   letter-spacing: 0.5px;
 }
-#import-btn > * {
-  transform: skewX(12deg);
-}
 #import-btn:hover:not(:disabled) {
   background: linear-gradient(180deg, rgba(0, 255, 136, 0.45) 0%, rgba(0, 255, 136, 0.24) 100%);
   border-color: rgba(0, 255, 136, 0.9);
-  transform: skewX(-12deg) translateY(-1px);
+  transform: translateY(-1px);
   box-shadow: 0 4px 20px rgba(0, 255, 136, 0.5);
 }
 .settings-btn {

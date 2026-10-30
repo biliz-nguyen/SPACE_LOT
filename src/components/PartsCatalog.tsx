@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import * as Accordion from "@radix-ui/react-accordion";
 import {
   Search,
@@ -8,6 +8,8 @@ import {
   Layers,
   PackageOpen,
   X,
+  SlidersHorizontal,
+  Check,
 } from "lucide-react";
 import {
   CATALOG_FAMILIES,
@@ -25,7 +27,27 @@ export function PartsCatalog({
   useProject();
   const [search, setSearch] = useState(""),
     [category, setCategory] = useState("all"),
-    [expanded, setExpanded] = useState<string[]>(["frame", "motor"]);
+    [expanded, setExpanded] = useState<string[]>(["frame", "motor"]),
+    [filterOpen, setFilterOpen] = useState(false);
+  const filterDropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!filterOpen) return;
+    const handleOutsideClick = (e: PointerEvent | MouseEvent) => {
+      if (filterDropdownRef.current && !filterDropdownRef.current.contains(e.target as Node)) {
+        setFilterOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFilterOpen(false);
+    };
+    document.addEventListener("pointerdown", handleOutsideClick);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handleOutsideClick);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [filterOpen]);
   const matches = filterCatalog(catalog, category, search) as Part[];
   return (
     <>
@@ -34,7 +56,7 @@ export function PartsCatalog({
           <span className="eyebrow">COMPONENT LIBRARY</span>
           <h2>Parts catalog</h2>
         </div>
-        <span className="count-badge" id="part-count">
+        <span className="sr-only" id="part-count" aria-hidden="true">
           {catalog.length}
         </span>
       </div>
@@ -60,9 +82,11 @@ export function PartsCatalog({
       </label>
       <select
         id="catalog-filter"
-        className="catalog-select"
+        className="sr-only"
         value={category}
         onChange={(e) => setCategory(e.target.value)}
+        tabIndex={-1}
+        aria-hidden="true"
       >
         <option value="all">All component types</option>
         {CATALOG_CATEGORIES.map((c) => (
@@ -71,6 +95,119 @@ export function PartsCatalog({
           </option>
         ))}
       </select>
+
+      {/* Space Cyber Component Filter Dropdown */}
+      <div className="cyber-filter-container" ref={filterDropdownRef}>
+        <button
+          type="button"
+          className={`cyber-filter-trigger ${filterOpen ? "active" : ""}`}
+          onClick={() => setFilterOpen((prev) => !prev)}
+          aria-expanded={filterOpen}
+          aria-haspopup="listbox"
+          aria-label="Filter by component type"
+        >
+          <div className="cyber-filter-current">
+            {category !== "all" && CATEGORY_IMAGE_MAP[category] ? (
+              <img
+                src={CATEGORY_IMAGE_MAP[category]}
+                alt=""
+                className="cyber-filter-icon"
+              />
+            ) : (
+              <SlidersHorizontal size={14} className="cyber-filter-icon-svg" />
+            )}
+            <span className="cyber-filter-label">
+              {category === "all"
+                ? "All component types"
+                : CATALOG_CATEGORIES.find((c) => c.id === category)?.label || "Component types"}
+            </span>
+          </div>
+
+          <div className="cyber-filter-side">
+            <span className="cyber-filter-count">
+              {category === "all" ? catalog.length : matches.length}
+            </span>
+            <ChevronDown size={14} className={`cyber-filter-chevron ${filterOpen ? "open" : ""}`} />
+          </div>
+        </button>
+
+        {filterOpen && (
+          <div className="cyber-filter-menu" role="listbox">
+            <div className="cyber-filter-menu-header">
+              <span>SUBSYSTEM FILTER</span>
+              <span className="status-dot good" />
+            </div>
+
+            <button
+              type="button"
+              role="option"
+              aria-selected={category === "all"}
+              className={`cyber-filter-option ${category === "all" ? "selected" : ""}`}
+              onClick={() => {
+                setCategory("all");
+                setFilterOpen(false);
+              }}
+            >
+              <div className="option-main">
+                <SlidersHorizontal size={15} className="option-icon-svg" />
+                <div className="option-text">
+                  <strong>All component types</strong>
+                  <small>Full aerospace component catalog</small>
+                </div>
+              </div>
+              <div className="option-meta">
+                <span className="option-count">{catalog.length}</span>
+                {category === "all" && <Check size={14} className="option-check" />}
+              </div>
+            </button>
+
+            <div className="cyber-filter-divider" />
+
+            {CATALOG_FAMILIES.map((family) => (
+              <div className="cyber-filter-family-group" key={family.name}>
+                <div className="cyber-filter-family-title">{family.name}</div>
+                {family.categories.map((c) => {
+                  const isSelected = category === c.id;
+                  const count = catalog.filter((p) => p.category === c.id).length;
+                  return (
+                    <button
+                      key={c.id}
+                      type="button"
+                      role="option"
+                      aria-selected={isSelected}
+                      className={`cyber-filter-option ${isSelected ? "selected" : ""}`}
+                      onClick={() => {
+                        setCategory(c.id);
+                        setFilterOpen(false);
+                      }}
+                    >
+                      <div className="option-main">
+                        {CATEGORY_IMAGE_MAP[c.id] ? (
+                          <img
+                            src={CATEGORY_IMAGE_MAP[c.id]}
+                            alt=""
+                            className="option-icon-img"
+                          />
+                        ) : (
+                          <Box size={14} className="option-icon-svg" />
+                        )}
+                        <div className="option-text">
+                          <strong>{c.label}</strong>
+                          <small>{c.description}</small>
+                        </div>
+                      </div>
+                      <div className="option-meta">
+                        <span className="option-count">{count}</span>
+                        {isSelected && <Check size={14} className="option-check" />}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       <div className="catalog-results">
         <span id="catalog-match-count" aria-live="polite">
           {matches.length} components

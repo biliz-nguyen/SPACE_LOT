@@ -73,12 +73,16 @@ export function AssemblyViewport({
     <>
       <div className="viewport-heading">
         <div className="viewport-title-group">
-          <span className="eyebrow">
-            WORKSPACE <span>/</span> QUAD X
-          </span>
           <h1 className="viewport-title">
             Assembly studio<span className="title-dot">.</span>
           </h1>
+          <div className="collection-breadcrumb" aria-label="Collection: DRONE">
+            <span className="breadcrumb-label">COLLECTION</span>
+            <span className="breadcrumb-arrow" aria-hidden="true">→</span>
+            <span className="breadcrumb-target" title="Collection: Drone (Robotic arm, Humanoid & other hardware systems coming soon)">
+              DRONE
+            </span>
+          </div>
         </div>
         <div className="mode-toggle" role="group" aria-label="Workspace mode">
           <button

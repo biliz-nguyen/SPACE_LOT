@@ -790,34 +790,58 @@ input[type="range"] {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 10px;
+  width: 16px;
   cursor: col-resize;
-  z-index: 30;
+  z-index: 50;
   touch-action: none;
   display: none;
 }
-@media (min-width: 1025px) {
+@media (min-width: 861px) {
   .panel-resize-handle {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 .panel-resize-handle.left {
-  right: -5px;
+  right: -8px;
 }
 .panel-resize-handle::after {
   content: "";
   position: absolute;
   top: 0;
   bottom: 0;
-  left: 4px;
+  left: 7px;
   width: 2px;
   background: transparent;
   transition: all 0.15s ease;
 }
+/* Cyber Grip Notch in vertical center */
+.panel-resize-handle::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 6px;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 32px;
+  border-radius: 9999px;
+  background: rgba(0, 255, 136, 0.45);
+  border: 1px solid rgba(0, 255, 136, 0.7);
+  box-shadow: 0 0 8px rgba(0, 255, 136, 0.35);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
 .panel-resize-handle:hover::after,
 .panel-resize-handle.active::after {
   background: #00ff88;
-  box-shadow: 0 0 8px #00ff88, 0 0 16px rgba(0, 255, 136, 0.5);
+  box-shadow: 0 0 10px #00ff88, 0 0 20px rgba(0, 255, 136, 0.5);
+}
+.panel-resize-handle:hover::before,
+.panel-resize-handle.active::before {
+  background: #00ff88;
+  height: 48px;
+  box-shadow: 0 0 12px #00ff88, 0 0 24px rgba(0, 255, 136, 0.6);
 }
 .parts-panel,
 .inspector-panel {
@@ -3281,7 +3305,10 @@ input[type="range"] {
   .premium-workspace {
     overflow: hidden;
   }
-  .parts-panel,
+  .parts-panel {
+    height: 100%;
+    overflow: visible;
+  }
   .inspector-panel {
     height: 100%;
     overflow: hidden;
@@ -3302,7 +3329,7 @@ input[type="range"] {
 }
 @media (min-width: 1600px) {
   .premium-workspace {
-    grid-template-columns: 280px minmax(0, 1fr) 300px;
+    grid-template-columns: var(--left-panel-width, 280px) minmax(0, 1fr) 300px;
   }
   .workspace-main {
     padding: 16px 24px 10px;
@@ -3320,7 +3347,7 @@ input[type="range"] {
 }
 @media (max-width: 1350px) and (min-width: 1101px) {
   .premium-workspace {
-    grid-template-columns: 240px minmax(0, 1fr) 272px;
+    grid-template-columns: var(--left-panel-width, 240px) minmax(0, 1fr) 272px;
   }
   .app-header {
     gap: 12px;
@@ -3434,7 +3461,7 @@ input[type="range"] {
     display: none;
   }
   .premium-workspace {
-    grid-template-columns: 248px minmax(0, 1fr);
+    grid-template-columns: var(--left-panel-width, 248px) minmax(0, 1fr);
   }
   .inspector-panel {
     grid-column: 1/-1;

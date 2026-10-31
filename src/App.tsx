@@ -68,6 +68,11 @@ export default function App() {
 
   const handleLeftResizeStart = (e: React.PointerEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.stopPropagation();
+    const target = e.currentTarget;
+    try {
+      target.setPointerCapture(e.pointerId);
+    } catch {}
     setIsResizingLeft(true);
     document.body.style.userSelect = "none";
     document.body.style.cursor = "col-resize";
@@ -76,26 +81,31 @@ export default function App() {
 
     const onPointerMove = (moveEv: PointerEvent) => {
       const delta = moveEv.clientX - startX;
-      const nextWidth = Math.max(220, Math.min(500, Math.round(startWidth + delta)));
+      const nextWidth = Math.max(200, Math.min(550, Math.round(startWidth + delta)));
       setLeftWidth(nextWidth);
     };
 
     const onPointerUp = (upEv: PointerEvent) => {
+      try {
+        target.releasePointerCapture(upEv.pointerId);
+      } catch {}
       setIsResizingLeft(false);
       document.body.style.userSelect = "";
       document.body.style.cursor = "";
       window.getSelection()?.removeAllRanges();
       window.removeEventListener("pointermove", onPointerMove);
       window.removeEventListener("pointerup", onPointerUp);
+      window.removeEventListener("pointercancel", onPointerUp);
       try {
         const delta = upEv.clientX - startX;
-        const finalWidth = Math.max(220, Math.min(500, Math.round(startWidth + delta)));
+        const finalWidth = Math.max(200, Math.min(550, Math.round(startWidth + delta)));
         localStorage.setItem("space_lot_panel_width", String(finalWidth));
       } catch {}
     };
 
     window.addEventListener("pointermove", onPointerMove);
     window.addEventListener("pointerup", onPointerUp);
+    window.addEventListener("pointercancel", onPointerUp);
   };
   const isAutomated = typeof window !== "undefined" && Boolean(window.navigator.webdriver);
   const [taskbarOpen, setTaskbarOpen] = useState(() => {
@@ -535,6 +545,9 @@ export default function App() {
           className={`premium-workspace ${panel ? `show-${panel}` : ""} ${collapseLeft ? "collapse-left" : ""} ${collapseRight ? "collapse-right" : ""} ${isResizingLeft ? "resizing" : ""}`}
           style={
             {
+              gridTemplateColumns: collapseLeft
+                ? (collapseRight ? "0px minmax(0, 1fr) 0px" : "0px minmax(0, 1fr) 280px")
+                : (collapseRight ? `${leftWidth}px minmax(0, 1fr) 0px` : `${leftWidth}px minmax(0, 1fr) 280px`),
               "--left-panel-width": `${leftWidth}px`,
             } as React.CSSProperties
           }

@@ -552,17 +552,7 @@ export default function App() {
             <InspectorPanel notify={notify} openImport={() => open("import")} />
           </aside>
         </div>
-        <footer className="app-footer">
-          <span>
-            <span className="status-led" />
-            LOCAL FIRST<span className="footer-divider">/</span>CAD + MESH
-            PIPELINE
-          </span>
-          <span>
-            SPACE_LOT PREMIUM UI v1 <span className="footer-divider">·</span>{" "}
-            ENGINEER YOUR NEXT HORIZON
-          </span>
-        </footer>
+        
         {message ? (
           <motion.div
             key={message}

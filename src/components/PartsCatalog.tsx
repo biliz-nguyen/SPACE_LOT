@@ -60,76 +60,62 @@ export function PartsCatalog({
           {catalog.length}
         </span>
       </div>
-      <div className="catalog-search">
-        <Search size={17} />
-        <input
-          id="catalog-search"
-          aria-label="Tìm linh kiện"
-          placeholder="Find a component…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        {search ? (
-          <button aria-label="Xóa tìm kiếm" onClick={() => setSearch("")}>
-            <X size={15} />
-          </button>
-        ) : (
-          <kbd>/</kbd>
-        )}
-      </div>
-      <label className="sr-only" htmlFor="catalog-filter">
-        Lọc theo nhóm linh kiện
-      </label>
-      <select
-        id="catalog-filter"
-        className="sr-only"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        tabIndex={-1}
-        aria-hidden="true"
-      >
-        <option value="all">All component types</option>
-        {CATALOG_CATEGORIES.map((c) => (
-          <option key={c.id} value={c.id}>
-            {c.label}
-          </option>
-        ))}
-      </select>
+      <div className="catalog-toolbar">
+        <div className="catalog-search">
+          <Search size={15} />
+          <input
+            id="catalog-search"
+            aria-label="Tìm linh kiện"
+            placeholder="Find a component…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          {search ? (
+            <button aria-label="Xóa tìm kiếm" onClick={() => setSearch("")}>
+              <X size={14} />
+            </button>
+          ) : (
+            <kbd>/</kbd>
+          )}
+        </div>
 
-      {/* Space Cyber Component Filter Dropdown */}
-      <div className="cyber-filter-container" ref={filterDropdownRef}>
-        <button
-          type="button"
-          className={`cyber-filter-trigger ${filterOpen ? "active" : ""}`}
-          onClick={() => setFilterOpen((prev) => !prev)}
-          aria-expanded={filterOpen}
-          aria-haspopup="listbox"
-          aria-label="Filter by component type"
+        <label className="sr-only" htmlFor="catalog-filter">
+          Lọc theo nhóm linh kiện
+        </label>
+        <select
+          id="catalog-filter"
+          className="sr-only"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          tabIndex={-1}
+          aria-hidden="true"
         >
-          <div className="cyber-filter-current">
-            {category !== "all" && CATEGORY_IMAGE_MAP[category] ? (
-              <img
-                src={CATEGORY_IMAGE_MAP[category]}
-                alt=""
-                className="cyber-filter-icon"
-              />
-            ) : (
-              <SlidersHorizontal size={14} className="cyber-filter-icon-svg" />
-            )}
-            <span className="cyber-filter-label">
-              {category === "all"
-                ? "All component types"
-                : CATALOG_CATEGORIES.find((c) => c.id === category)?.label || "Component types"}
-            </span>
-          </div>
+          <option value="all">All component types</option>
+          {CATALOG_CATEGORIES.map((c) => (
+            <option key={c.id} value={c.id}>
+              {c.label}
+            </option>
+          ))}
+        </select>
 
-          <div className="cyber-filter-side">
-            <span className="cyber-filter-count">
-              {category === "all" ? catalog.length : matches.length}
-            </span>
-            <ChevronDown size={14} className={`cyber-filter-chevron ${filterOpen ? "open" : ""}`} />
-          </div>
-        </button>
+        {/* Space Cyber Component Filter Dropdown (Condensed 3-lines icon button) */}
+        <div className="cyber-filter-container" ref={filterDropdownRef}>
+          <button
+            type="button"
+            className={`cyber-filter-trigger icon-only ${filterOpen ? "active" : ""} ${category !== "all" ? "filtered" : ""}`}
+            onClick={() => setFilterOpen((prev) => !prev)}
+            aria-expanded={filterOpen}
+            aria-haspopup="listbox"
+            aria-label="Filter by component type"
+            title={
+              category === "all"
+                ? "Filter component types"
+                : `Filter: ${CATALOG_CATEGORIES.find((c) => c.id === category)?.label || category}`
+            }
+          >
+            <SlidersHorizontal size={16} className="cyber-filter-icon-svg" />
+            {category !== "all" && <span className="filter-active-dot" aria-hidden="true" />}
+          </button>
 
         {filterOpen && (
           <div className="cyber-filter-menu" role="listbox">
@@ -208,8 +194,9 @@ export function PartsCatalog({
           </div>
         )}
       </div>
+      </div>
       <div className="catalog-results">
-        <span id="catalog-match-count" aria-live="polite">
+        <span className="sr-only" id="catalog-match-count" aria-live="polite">
           {matches.length} components
         </span>
         <button
@@ -345,10 +332,7 @@ export function PartsCatalog({
           </p>
         </div>
       </div>
-      <div className="panel-foot">
-        <span className="status-led" />
-        Private, on this browser
-      </div>
+      
     </>
   );
 }

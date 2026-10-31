@@ -4,6 +4,7 @@ import {
   Search,
   Plus,
   ChevronDown,
+  ChevronsUpDown,
   Box,
   Layers,
   PackageOpen,
@@ -27,7 +28,7 @@ export function PartsCatalog({
   useProject();
   const [search, setSearch] = useState(""),
     [category, setCategory] = useState("all"),
-    [expanded, setExpanded] = useState<string[]>(["frame", "motor"]),
+    [expanded, setExpanded] = useState<string[]>([]),
     [filterOpen, setFilterOpen] = useState(false);
   const filterDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -195,25 +196,7 @@ export function PartsCatalog({
         )}
       </div>
       </div>
-      <div className="catalog-results">
-        <span className="sr-only" id="catalog-match-count" aria-live="polite">
-          {matches.length} components
-        </span>
-        <button
-          id="catalog-toggle-all"
-          onClick={() =>
-            setExpanded(
-              expanded.length === CATALOG_CATEGORIES.length
-                ? []
-                : CATALOG_CATEGORIES.map((c) => c.id),
-            )
-          }
-        >
-          {expanded.length === CATALOG_CATEGORIES.length
-            ? "Collapse all"
-            : "Expand all"}
-        </button>
-      </div>
+      
       <div className="catalog-scroll">
         <div id="catalog-list">
           <Accordion.Root
@@ -225,13 +208,46 @@ export function PartsCatalog({
             }
             onValueChange={setExpanded}
           >
-            {CATALOG_FAMILIES.map((family) => {
+            {CATALOG_FAMILIES.map((family, idx) => {
               const categories = family.categories.filter((c) =>
                 matches.some((p) => p.category === c.id),
               );
               return categories.length ? (
                 <div className="catalog-family" key={family.name}>
-                  <div className="family-label">{family.name}</div>
+                  <div className="family-header-row">
+                    <div className="family-label">{family.name}</div>
+                    {idx === 0 && (
+                      <>
+                        <span className="sr-only" id="catalog-match-count" aria-live="polite">
+                          {matches.length} components
+                        </span>
+                        <button
+                          id="catalog-toggle-all"
+                          type="button"
+                          className="cyber-expand-all-btn"
+                          title={
+                            expanded.length === CATALOG_CATEGORIES.length
+                              ? "Collapse all categories"
+                              : "Expand all categories"
+                          }
+                          onClick={() =>
+                            setExpanded(
+                              expanded.length === CATALOG_CATEGORIES.length
+                                ? []
+                                : CATALOG_CATEGORIES.map((c) => c.id),
+                            )
+                          }
+                        >
+                          <ChevronsUpDown size={12} className="expand-icon" />
+                          <span>
+                            {expanded.length === CATALOG_CATEGORIES.length
+                              ? "Collapse all"
+                              : "Expand all"}
+                          </span>
+                        </button>
+                      </>
+                    )}
+                  </div>
                   {categories.map((c) => {
                     const items = matches.filter((p) => p.category === c.id);
                     return (

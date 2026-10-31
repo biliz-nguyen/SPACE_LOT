@@ -55,6 +55,48 @@ export default function App() {
     [resetOpen, setResetOpen] = useState(false),
     [collapseLeft, setCollapseLeft] = useState(false),
     [collapseRight, setCollapseRight] = useState(false);
+  const [leftWidth, setLeftWidth] = useState(() => {
+    if (typeof window === "undefined") return 256;
+    try {
+      const saved = localStorage.getItem("space_lot_panel_width");
+      return saved ? Math.max(220, Math.min(500, Number(saved))) : 256;
+    } catch {
+      return 256;
+    }
+  });
+  const [isResizingLeft, setIsResizingLeft] = useState(false);
+
+  const handleLeftResizeStart = (e: React.PointerEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsResizingLeft(true);
+    document.body.style.userSelect = "none";
+    document.body.style.cursor = "col-resize";
+    const startX = e.clientX;
+    const startWidth = leftWidth;
+
+    const onPointerMove = (moveEv: PointerEvent) => {
+      const delta = moveEv.clientX - startX;
+      const nextWidth = Math.max(220, Math.min(500, Math.round(startWidth + delta)));
+      setLeftWidth(nextWidth);
+    };
+
+    const onPointerUp = (upEv: PointerEvent) => {
+      setIsResizingLeft(false);
+      document.body.style.userSelect = "";
+      document.body.style.cursor = "";
+      window.getSelection()?.removeAllRanges();
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup", onPointerUp);
+      try {
+        const delta = upEv.clientX - startX;
+        const finalWidth = Math.max(220, Math.min(500, Math.round(startWidth + delta)));
+        localStorage.setItem("space_lot_panel_width", String(finalWidth));
+      } catch {}
+    };
+
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup", onPointerUp);
+  };
   const isAutomated = typeof window !== "undefined" && Boolean(window.navigator.webdriver);
   const [taskbarOpen, setTaskbarOpen] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -490,7 +532,12 @@ export default function App() {
           </Button>
         </div>
         <div
-          className={`premium-workspace ${panel ? `show-${panel}` : ""} ${collapseLeft ? "collapse-left" : ""} ${collapseRight ? "collapse-right" : ""}`}
+          className={`premium-workspace ${panel ? `show-${panel}` : ""} ${collapseLeft ? "collapse-left" : ""} ${collapseRight ? "collapse-right" : ""} ${isResizingLeft ? "resizing" : ""}`}
+          style={
+            {
+              "--left-panel-width": `${leftWidth}px`,
+            } as React.CSSProperties
+          }
         >
           <aside id="parts-panel" className="parts-panel">
             <button
@@ -509,6 +556,16 @@ export default function App() {
               <PanelLeftClose size={15} />
             </button>
             <PartsCatalog notify={notify} />
+            {!collapseLeft && (
+              <div
+                className={`panel-resize-handle left ${isResizingLeft ? "active" : ""}`}
+                onPointerDown={handleLeftResizeStart}
+                title="Kéo để chỉnh độ rộng panel"
+                aria-label="Resize parts panel"
+                role="separator"
+                aria-orientation="vertical"
+              />
+            )}
           </aside>
           <main id="workspace-main" className="workspace-main" tabIndex={-1}>
             {collapseLeft && (

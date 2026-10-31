@@ -60,7 +60,7 @@ export function InspectorPanel({
   function report() {
     downloadJSON("space-lot-validation-report.json", {
       generatedAt: new Date().toISOString(),
-      title: "SPACE_LOT prototype validation report",
+      title: "SPACE_PLOT prototype validation report",
       disclaimer: "ILLUSTRATIVE DATA ONLY — DOES NOT APPROVE REAL HARDWARE",
       projectName: store.project.projectName,
       summary: analyze(store.project, catalog),

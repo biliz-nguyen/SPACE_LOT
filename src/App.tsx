@@ -58,7 +58,7 @@ export default function App() {
   const [leftWidth, setLeftWidth] = useState(() => {
     if (typeof window === "undefined") return 256;
     try {
-      const saved = localStorage.getItem("space_lot_panel_width");
+      const saved = localStorage.getItem("space_plot_panel_width") || localStorage.getItem("space_lot_panel_width");
       return saved ? Math.max(220, Math.min(500, Number(saved))) : 256;
     } catch {
       return 256;
@@ -99,7 +99,7 @@ export default function App() {
       try {
         const delta = upEv.clientX - startX;
         const finalWidth = Math.max(200, Math.min(550, Math.round(startWidth + delta)));
-        localStorage.setItem("space_lot_panel_width", String(finalWidth));
+        localStorage.setItem("space_plot_panel_width", String(finalWidth));
       } catch {}
     };
 
@@ -242,16 +242,18 @@ export default function App() {
         </a>
         <header className="app-header">
           <div className="header-left">
-            <a className="brand cyber-skew" href="/" aria-label="SPACE_LOT home">
-              <div className="unskew-content">
+            <a className="brand cyber-skew" href="/" aria-label="SPACE_PLOT home">
+              <div className="unskew-content brand-inner">
                 <div className="brand-logo-frame">
                   <img src="/logo.png" alt="" />
-                  <span className="logo-pulse-ring" aria-hidden="true" />
                 </div>
                 <div className="brand-text">
-                  <span className="brand-name">SPACE_LOT</span>
+                  <span className="brand-name">SPACE_PLOT</span>
                   <span className="brand-sub">SYS // 3D AERO</span>
                 </div>
+              </div>
+              <div className="cosmic-meteor-track" aria-hidden="true">
+                <div className="cosmic-meteor-star" />
               </div>
             </a>
             <div className="project-inline-identity cyber-skew">

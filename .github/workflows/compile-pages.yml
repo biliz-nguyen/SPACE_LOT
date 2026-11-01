@@ -1,0 +1,47 @@
+name: Compile SPACE_PLOT for GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: space-plot-static-publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[compiled-pages]')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Compile production bundle
+        run: npm run build
+      - name: Copy compiled HTML and assets into Pages root
+        run: |
+          test -s dist/app.html
+          rsync -a --exclude='app.html' --exclude='index.html' dist/ ./
+          cp dist/app.html index.html
+          touch .nojekyll
+      - name: Commit production files to main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(pages): publish compiled SPACE_PLOT [compiled-pages]"
+            git push origin HEAD:main
+          fi

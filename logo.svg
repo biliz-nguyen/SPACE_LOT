@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none">
+  <defs>
+    <linearGradient id="mGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="30%" stop-color="#00ff88"/>
+      <stop offset="100%" stop-color="#008844"/>
+    </linearGradient>
+    <filter id="mGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <!-- Cyber aerospace mechanical 'M' insignia -->
+  <g filter="url(#mGlow)">
+    <path d="M 6 32 L 10.5 8 L 16.5 8 L 20 18.5 L 23.5 8 L 29.5 8 L 34 32 L 28 32 L 25.5 17 L 21.5 27 L 18.5 27 L 14.5 17 L 12 32 Z" fill="url(#mGrad)" stroke="rgba(0, 255, 136, 0.85)" stroke-width="0.8" stroke-linejoin="round" />
+    <polygon points="20,28.5 22.5,32 20,35.5 17.5,32" fill="#00ff88" />
+    <path d="M 11 10 L 16 10 L 19 19 L 18 20 Z" fill="#ffffff" opacity="0.6" />
+    <path d="M 29 10 L 24 10 L 21 19 L 22 20 Z" fill="#ffffff" opacity="0.35" />
+  </g>
+</svg>

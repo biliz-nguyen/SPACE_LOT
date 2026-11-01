@@ -1,0 +1,1 @@
+Place exported GLB assets here in future versions. v0.1 renders all nine catalog categories procedurally, so no model download is required. The Inspector's "Load GLB" button can preview a .glb file for a selected part temporarily without updating engineering data.
